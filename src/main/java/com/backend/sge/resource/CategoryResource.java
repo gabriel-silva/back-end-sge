@@ -23,60 +23,41 @@ public class CategoryResource {
     private CategoryRepository categoryRepository;
 
     @PostMapping("/category")
-    public ResponseEntity<Category> createCategory(@Valid @RequestBody CategoryValidation categoryValidation) throws BadRequestException {
-        try {
-            Category category = new Category();
-            category.setName(categoryValidation.getName());
-            Category responseCategory = categoryRepository.save(category);
-            return new ResponseEntity<Category>(responseCategory, HttpStatus.CREATED);
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
+    public ResponseEntity<Category> createCategory(@Valid @RequestBody CategoryValidation categoryValidation) {
+        Category category = new Category();
+        category.setName(categoryValidation.getName());
+        Category responseCategory = categoryRepository.save(category);
+        return new ResponseEntity<Category>(responseCategory, HttpStatus.CREATED);
     }
 
-    @PutMapping("/category")
-    public ResponseEntity<Category> updateCategory(@Valid @RequestBody CategoryValidation categoryValidation) throws BadRequestException {
-        try {
-            Category category = categoryRepository.findById(categoryValidation.getId()).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
-            category.setId(categoryValidation.getId());
-            category.setName(categoryValidation.getName());
-            Category responseCategory = categoryRepository.save(category);
-            return new ResponseEntity<Category>(responseCategory, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
+    @PutMapping("/category/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable(value = "id") long id,
+                                                   @Valid @RequestBody CategoryValidation categoryValidation) throws NotFoundException {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
+        category.setId(id);
+        category.setName(categoryValidation.getName());
+        Category responseCategory = categoryRepository.save(category);
+        return new ResponseEntity<Category>(responseCategory, HttpStatus.OK);
     }
 
     @DeleteMapping("/category/{id}")
-    public ResponseEntity<Category> deleteCategory(@PathVariable(name = "id") long id) throws BadRequestException {
-        try {
-            Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
-            categoryRepository.delete(category);
-            return new ResponseEntity<Category>(HttpStatus.OK);
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
+    public ResponseEntity<Category> deleteCategory(@PathVariable(name = "id") long id) throws NotFoundException {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
+        categoryRepository.delete(category);
+        return new ResponseEntity<Category>(HttpStatus.OK);
     }
 
     @GetMapping("/category/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable(name = "id") long id) throws BadRequestException {
-        try {
-            Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
-            return new ResponseEntity<Category>(category, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
+    public ResponseEntity<Category> getCategoryById(@PathVariable(name = "id") long id) throws NotFoundException {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
+        return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
     @GetMapping("/category")
     public Page<Category> getAllCategories(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
-            @RequestParam(value = "limit", defaultValue = "10") int limit) throws BadRequestException {
-        try {
-            return categoryRepository.findAll(PageRequest.of(offset, limit));
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
+            @RequestParam(value = "limit", defaultValue = "10") int limit) {
+        return categoryRepository.findAll(PageRequest.of(offset, limit));
     }
 
 }
