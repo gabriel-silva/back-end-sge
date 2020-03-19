@@ -1,6 +1,5 @@
 package com.backend.sge.resource;
 
-import com.backend.sge.exception.BadRequestException;
 import com.backend.sge.exception.NotFoundException;
 import com.backend.sge.model.Category;
 import com.backend.sge.repository.CategoryRepository;
@@ -22,7 +21,7 @@ public class CategoryResource {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @PostMapping("/category")
+    @RequestMapping(value = "/category", method = RequestMethod.POST)
     public ResponseEntity<Category> createCategory(@Valid @RequestBody CategoryValidation categoryValidation) {
         Category category = new Category();
         category.setName(categoryValidation.getName());
@@ -30,7 +29,7 @@ public class CategoryResource {
         return new ResponseEntity<Category>(responseCategory, HttpStatus.CREATED);
     }
 
-    @PutMapping("/category/{id}")
+    @RequestMapping(value = "/category/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Category> updateCategory(@PathVariable(value = "id") long id,
                                                    @Valid @RequestBody CategoryValidation categoryValidation) throws NotFoundException {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
@@ -40,20 +39,20 @@ public class CategoryResource {
         return new ResponseEntity<Category>(responseCategory, HttpStatus.OK);
     }
 
-    @DeleteMapping("/category/{id}")
+    @RequestMapping(value = "/category/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Category> deleteCategory(@PathVariable(name = "id") long id) throws NotFoundException {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
         categoryRepository.delete(category);
         return new ResponseEntity<Category>(HttpStatus.OK);
     }
 
-    @GetMapping("/category/{id}")
+    @RequestMapping(value = "/category/{id}", method = RequestMethod.GET)
     public ResponseEntity<Category> getCategoryById(@PathVariable(name = "id") long id) throws NotFoundException {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
         return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
-    @GetMapping("/category")
+    @RequestMapping(value = "/category", method = RequestMethod.GET)
     public Page<Category> getAllCategories(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
