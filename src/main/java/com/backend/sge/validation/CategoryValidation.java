@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
@@ -14,8 +14,8 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode
 public class CategoryValidation {
 
-    @NotNull(message = "categoria é obrigatória")
-    @Size(min = 3, max = 50, message = "categoria deve ser igual ou superior a 3 caracteres e menor que 50 caracteres")
+    @NotBlank(message = "nome da categoria é obrigatório")
+    @Size(min = 3, max = 50, message = "nome da categoria deve ser igual ou superior a 3 caracteres e menor que 50 caracteres")
     private String name;
 
 }
