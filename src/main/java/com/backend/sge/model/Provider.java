@@ -21,7 +21,6 @@ public class Provider {
 
     private String name;
     private String cnpj;
-    private String stateRegistration;
     private String cellPhone;
     private String phone;
 

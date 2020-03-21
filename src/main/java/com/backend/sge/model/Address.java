@@ -5,11 +5,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Address {
+public class Address implements Serializable {
     private String publicPlace;
     private Integer number;
     private String complement;

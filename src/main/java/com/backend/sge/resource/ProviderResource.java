@@ -27,7 +27,6 @@ public class ProviderResource {
         Provider provider = new Provider();
         provider.setName(providerValidation.getName());
         provider.setCnpj(providerValidation.getCnpj());
-        provider.setStateRegistration(providerValidation.getStateRegistration());
         provider.setPhone(providerValidation.getPhone());
         provider.setCellPhone(providerValidation.getCellPhone());
 
@@ -54,7 +53,6 @@ public class ProviderResource {
         provider.setId(id);
         provider.setName(providerValidation.getName());
         provider.setCnpj(providerValidation.getCnpj());
-        provider.setStateRegistration(providerValidation.getStateRegistration());
         provider.setPhone(providerValidation.getPhone());
         provider.setCellPhone(providerValidation.getCellPhone());
 
