@@ -22,9 +22,15 @@ public class ProviderValidation {
     @Size(min = 18, max = 18, message = "cnpj deve ser igual a 18 caracteres")
     private String cnpj;
 
+    @Size(max = 30, message = "inscrição estadual deve ser igual ou menor que 30 caracteres")
+    private String stateRegistration;
+
     @NotBlank(message = "telefone fixo é obrigatório")
-    @Size(min = 14, max = 14, message = "telefone fixo deve ser igual a 15 caracteres")
+    @Size(min = 14, max = 14, message = "telefone fixo deve ser igual a 14 caracteres")
     private String phone;
+
+    @Size(min = 15, max = 15, message = "celular deve ser igual a 15 caracteres")
+    private String cellPhone;
 
     @Embedded
     private AddressValidation addressValidation;
