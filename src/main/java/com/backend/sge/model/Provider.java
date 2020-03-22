@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_provider")
@@ -36,4 +38,8 @@ public class Provider {
     @ApiModelProperty(value = "Endereço do fornecedor")
     @Embedded
     private Address address;
+
+    @ApiModelProperty(value = "Produtos")
+    @OneToMany(mappedBy = "idProvider")
+    private List<Product> products = new ArrayList<Product>();
 }

@@ -26,6 +26,7 @@ public class ProductResource {
     @RequestMapping(value = "/product", method = RequestMethod.POST)
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductValidation productValidation) {
         Product product = new Product();
+        product.setIdProvider(productValidation.getIdProvider());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -40,6 +41,7 @@ public class ProductResource {
                                                  @Valid @RequestBody ProductValidation productValidation) throws NotFoundException {
         Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: $id"));
         product.setId(id);
+        product.setIdProvider(productValidation.getIdProvider());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());

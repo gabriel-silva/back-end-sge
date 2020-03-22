@@ -16,7 +16,7 @@ public class ProductExistValidation {
 
     @NotNull(message = "código do produto é obrigatório")
     @PositiveOrZero(message = "código do produto não pode ser negativo")
-    private Integer idProduct;
+    private Long idProduct;
 
     @NotNull(message = "quantidade é obrigatório")
     private Integer qtd;

@@ -21,6 +21,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ApiModelProperty(value = "Código do fornecedor")
+    private Long idProvider;
+
     @ApiModelProperty(value = "Nome do produto")
     private String name;
 

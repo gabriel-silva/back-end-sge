@@ -62,7 +62,7 @@ public class ProviderResourceTest {
         providerValidation.setCellPhone("(21) 99933-3639");
 
         AddressValidation addressValidation = new AddressValidation();
-        addressValidation.setCep("22.250-040");
+        addressValidation.setCep("22250-040");
         addressValidation.setCity("Rio de Janeiro");
         addressValidation.setComplement("Andar 12 Parte");
         addressValidation.setNeighborhood("Botafogo");
@@ -99,7 +99,7 @@ public class ProviderResourceTest {
                 .andExpect(jsonPath("$.cnpj", is("45.997.418/0001-53")))
                 .andExpect(jsonPath("$.phone", is("(21) 3300-3639")))
                 .andExpect(jsonPath("$.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.address.cep", is("22.250-040")))
+                .andExpect(jsonPath("$.address.cep", is("22250-040")))
                 .andExpect(jsonPath("$.address.city", is("Rio de Janeiro")))
                 .andExpect(jsonPath("$.address.complement", is("Andar 12 Parte")))
                 .andExpect(jsonPath("$.address.neighborhood", is("Botafogo")))
@@ -121,7 +121,7 @@ public class ProviderResourceTest {
         providerValidation.setCellPhone("(21) 99933-3639");
 
         AddressValidation addressValidation = new AddressValidation();
-        addressValidation.setCep("22.250-040");
+        addressValidation.setCep("22250-040");
         addressValidation.setCity("Rio de Janeiro");
         addressValidation.setComplement("Andar 12 Parte");
         addressValidation.setNeighborhood("Botafogo");
@@ -160,7 +160,7 @@ public class ProviderResourceTest {
                 .andExpect(jsonPath("$.cnpj", is("45.997.418/0001-53")))
                 .andExpect(jsonPath("$.phone", is("(21) 3300-3639")))
                 .andExpect(jsonPath("$.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.address.cep", is("22.250-040")))
+                .andExpect(jsonPath("$.address.cep", is("22250-040")))
                 .andExpect(jsonPath("$.address.city", is("Rio de Janeiro")))
                 .andExpect(jsonPath("$.address.complement", is("Andar 12 Parte")))
                 .andExpect(jsonPath("$.address.neighborhood", is("Botafogo")))
@@ -181,7 +181,7 @@ public class ProviderResourceTest {
         provider.setCellPhone("(21) 99933-3639");
 
         Address address = new Address();
-        address.setCep("22.250-040");
+        address.setCep("22250-040");
         address.setCity("Rio de Janeiro");
         address.setComplement("Andar 12 Parte");
         address.setNeighborhood("Botafogo");
@@ -201,7 +201,7 @@ public class ProviderResourceTest {
                 .andExpect(jsonPath("$.cnpj", is("45.997.418/0001-53")))
                 .andExpect(jsonPath("$.phone", is("(21) 3300-3639")))
                 .andExpect(jsonPath("$.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.address.cep", is("22.250-040")))
+                .andExpect(jsonPath("$.address.cep", is("22250-040")))
                 .andExpect(jsonPath("$.address.city", is("Rio de Janeiro")))
                 .andExpect(jsonPath("$.address.complement", is("Andar 12 Parte")))
                 .andExpect(jsonPath("$.address.neighborhood", is("Botafogo")))
@@ -230,7 +230,7 @@ public class ProviderResourceTest {
         provider.setCellPhone("(21) 99933-3639");
 
         Address address = new Address();
-        address.setCep("22.250-040");
+        address.setCep("22250-040");
         address.setCity("Rio de Janeiro");
         address.setComplement("Andar 12 Parte");
         address.setNeighborhood("Botafogo");

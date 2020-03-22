@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Embedded;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
@@ -29,6 +30,7 @@ public class ProviderValidation {
     @Size(min = 15, max = 15, message = "celular deve ser igual a 15 caracteres")
     private String cellPhone;
 
+    @Valid
     @Embedded
     private AddressValidation addressValidation;
 
