@@ -38,7 +38,7 @@ public class ProductEntryResource {
     @RequestMapping(value = "/productEntry", method = RequestMethod.POST)
     public ResponseEntity<ProductEntry> createProductEntry(@Valid @RequestBody ProductEntryValidation productEntryValidation) throws NotFoundException, BadRequestException {
 
-        Product product = productRepository.findById(productEntryValidation.getIdProduct()).orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: $id"));
+        Product product = productRepository.findByStatusIsTrueAndId(productEntryValidation.getIdProduct()).orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: $id"));
         Integer sumStockByIdProduct = stockRepository.sumStockByIdProduct(productEntryValidation.getIdProduct());
 
         ProductEntry productEntry = new ProductEntry();
