@@ -1,5 +1,6 @@
 package com.backend.sge.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,15 +16,24 @@ import javax.persistence.*;
 @EqualsAndHashCode
 public class Provider {
 
+    @ApiModelProperty(value = "Código")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
+    @ApiModelProperty(value = "Nome do fornecedor")
     private String name;
+
+    @ApiModelProperty(value = "Cnpj")
     private String cnpj;
+
+    @ApiModelProperty(value = "Celular")
     private String cellPhone;
+
+    @ApiModelProperty(value = "Telefone Fixo")
     private String phone;
 
+    @ApiModelProperty(value = "Endereço do fornecedor")
     @Embedded
     private Address address;
 }

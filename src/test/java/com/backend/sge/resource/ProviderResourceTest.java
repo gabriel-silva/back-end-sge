@@ -154,7 +154,7 @@ public class ProviderResourceTest {
         mockMvc.perform(put("/api/provider/1")
                 .content(objectMapper.writeValueAsString(providerValidation))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("COCA COLA INDUSTRIAS LTDA")))
                 .andExpect(jsonPath("$.cnpj", is("45.997.418/0001-53")))
@@ -243,7 +243,7 @@ public class ProviderResourceTest {
         when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
 
         mockMvc.perform(delete("/api/provider/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         verify(providerRepository, times(1)).delete(provider);
 

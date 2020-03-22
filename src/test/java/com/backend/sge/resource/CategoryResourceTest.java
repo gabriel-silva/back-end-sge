@@ -86,7 +86,7 @@ public class CategoryResourceTest {
         mockMvc.perform(put("/api/category/1")
                 .content(objectMapper.writeValueAsString(categoryValidation))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("Bebidas")));
 
@@ -127,7 +127,7 @@ public class CategoryResourceTest {
         when(categoryRepository.findById((long) 1)).thenReturn(Optional.of(category));
 
         mockMvc.perform(delete("/api/category/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         verify(categoryRepository, times(1)).delete(category);
 
