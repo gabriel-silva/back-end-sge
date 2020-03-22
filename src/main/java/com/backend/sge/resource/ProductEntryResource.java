@@ -41,18 +41,16 @@ public class ProductEntryResource {
         Product product = productRepository.findByStatusIsTrueAndId(productEntryValidation.getIdProduct()).orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: $id"));
         Integer sumStockByIdProduct = stockRepository.sumStockByIdProduct(productEntryValidation.getIdProduct());
 
-        ProductEntry productEntry = new ProductEntry();
-        Stock stock = new Stock();
-
         if (sumStockByIdProduct != null) {
             Integer sumStockQtdProductEntryQtd = (sumStockByIdProduct + productEntryValidation.getQtd());
             if (product.getMaxStock() >= sumStockQtdProductEntryQtd) {
 
-
+                ProductEntry productEntry = new ProductEntry();
                 productEntry.setIdProduct(product.getId());
                 productEntry.setQtd(productEntryValidation.getQtd());
                 productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
 
+                Stock stock = new Stock();
                 stock.setIdProduct(product.getId());
                 stock.setQtd(sumStockQtdProductEntryQtd);
                 stock.setUnitaryValue(productEntryValidation.getUnitaryValue());
@@ -66,10 +64,12 @@ public class ProductEntryResource {
             }
         } else {
 
+            ProductEntry productEntry = new ProductEntry();
             productEntry.setIdProduct(product.getId());
             productEntry.setQtd(productEntryValidation.getQtd());
             productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
 
+            Stock stock = new Stock();
             stock.setIdProduct(product.getId());
             stock.setQtd(productEntryValidation.getQtd());
             stock.setUnitaryValue(productEntryValidation.getUnitaryValue());
