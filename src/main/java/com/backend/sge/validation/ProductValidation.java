@@ -26,7 +26,7 @@ public class ProductValidation {
 
     @NotNull(message = "código da unidade de medida é obrigatório")
     @PositiveOrZero(message = "código da unidade de medida não pode ser negativo")
-    private Long idMeasurementUnity;
+    private Long idMeasurementUnit;
 
     @NotBlank(message = "nome do produto é obrigatório")
     @Size(min = 3, max = 255, message = "nome do produto deve ser igual ou superior a 3 caracteres e menor que 255 caracteres")

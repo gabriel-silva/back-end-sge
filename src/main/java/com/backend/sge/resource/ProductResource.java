@@ -1,8 +1,10 @@
 package com.backend.sge.resource;
 
 import com.backend.sge.exception.NotFoundException;
+import com.backend.sge.model.MeasurementUnit;
 import com.backend.sge.model.Product;
 import com.backend.sge.model.Provider;
+import com.backend.sge.repository.MeasurementUnitRepository;
 import com.backend.sge.repository.ProductRepository;
 import com.backend.sge.repository.ProviderRepository;
 import com.backend.sge.validation.ProductValidation;
@@ -27,13 +29,22 @@ public class ProductResource {
     @Autowired
     private ProviderRepository providerRepository;
 
+    @Autowired
+    private MeasurementUnitRepository measurementUnitRepository;
+
     @ApiOperation(value = "Cadastrar produto")
     @RequestMapping(value = "/product", method = RequestMethod.POST)
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductValidation productValidation) throws NotFoundException {
+
         Provider provider = providerRepository.findById(productValidation.getIdProvider())
                 .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + productValidation.getIdProvider()));
+
+        MeasurementUnit measurementUnit = measurementUnitRepository.findById(productValidation.getIdMeasurementUnit())
+                .orElseThrow(() -> new NotFoundException("Unidade de medida não encontrada com o id :: " + productValidation.getIdMeasurementUnit()));
+
         Product product = new Product();
         product.setIdProvider(provider.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -46,12 +57,19 @@ public class ProductResource {
     @RequestMapping(value = "/product/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Product> updateProduct(@PathVariable(value = "id") long id,
                                                  @Valid @RequestBody ProductValidation productValidation) throws NotFoundException {
-        Provider provider = providerRepository.findById(productValidation.getIdProvider())
-                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + productValidation.getIdProvider()));
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: " + id));
+
+        MeasurementUnit measurementUnit = measurementUnitRepository.findById(productValidation.getIdMeasurementUnit())
+                .orElseThrow(() -> new NotFoundException("Unidade de medida não encontrada com o id :: " + productValidation.getIdMeasurementUnit()));
+
+        Provider provider = providerRepository.findById(productValidation.getIdProvider())
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + productValidation.getIdProvider()));
+
         product.setId(id);
         product.setIdProvider(provider.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
