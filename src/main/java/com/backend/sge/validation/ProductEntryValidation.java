@@ -19,6 +19,7 @@ public class ProductEntryValidation {
     private Long idProduct;
 
     @NotNull(message = "quantidade é obrigatório")
+    @PositiveOrZero(message = "quantidade não pode ser negativo")
     private Integer qtd;
 
     @NotNull(message = "valor unitário é obrigatório")

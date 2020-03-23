@@ -2,7 +2,9 @@ package com.backend.sge.resource;
 
 import com.backend.sge.exception.NotFoundException;
 import com.backend.sge.model.Product;
+import com.backend.sge.model.Provider;
 import com.backend.sge.repository.ProductRepository;
+import com.backend.sge.repository.ProviderRepository;
 import com.backend.sge.validation.ProductValidation;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,16 @@ public class ProductResource {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProviderRepository providerRepository;
+
     @ApiOperation(value = "Cadastrar produto")
     @RequestMapping(value = "/product", method = RequestMethod.POST)
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductValidation productValidation) {
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductValidation productValidation) throws NotFoundException {
+        Provider provider = providerRepository.findById(productValidation.getIdProvider())
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + productValidation.getIdProvider()));
         Product product = new Product();
-        product.setIdProvider(productValidation.getIdProvider());
+        product.setIdProvider(provider.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -39,9 +46,12 @@ public class ProductResource {
     @RequestMapping(value = "/product/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Product> updateProduct(@PathVariable(value = "id") long id,
                                                  @Valid @RequestBody ProductValidation productValidation) throws NotFoundException {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: $id"));
+        Provider provider = providerRepository.findById(productValidation.getIdProvider())
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + productValidation.getIdProvider()));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: " + id));
         product.setId(id);
-        product.setIdProvider(productValidation.getIdProvider());
+        product.setIdProvider(provider.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -53,7 +63,8 @@ public class ProductResource {
     @ApiOperation(value = "Deletar produto")
     @RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Product> deleteProduct(@PathVariable(name = "id") long id) throws NotFoundException {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: $id"));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: " + id));
         productRepository.delete(product);
         return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
     }
@@ -61,7 +72,8 @@ public class ProductResource {
     @ApiOperation(value = "Listar produto pelo id")
     @RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
     public ResponseEntity<Product> getProductById(@PathVariable(name = "id") long id) throws NotFoundException {
-        Product product = productRepository.findById(id).orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: $id"));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: " + id));
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 

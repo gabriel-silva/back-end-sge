@@ -51,7 +51,8 @@ public class ProviderResource {
     @RequestMapping(value = "/provider/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Provider> updateProvider(@PathVariable(value = "id") long id,
                                                    @Valid @RequestBody ProviderValidation providerValidation) throws NotFoundException {
-        Provider provider = providerRepository.findById(id).orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: $id"));
+        Provider provider = providerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + id));
 
         provider.setId(id);
         provider.setName(providerValidation.getName());
@@ -76,7 +77,8 @@ public class ProviderResource {
     @ApiOperation(value = "Deletar fornecedor")
     @RequestMapping(value = "/provider/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Provider> deleteProvider(@PathVariable(name = "id") long id) throws NotFoundException {
-        Provider provider = providerRepository.findById(id).orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: $id"));
+        Provider provider = providerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + id));
         providerRepository.delete(provider);
         return new ResponseEntity<Provider>(HttpStatus.NO_CONTENT);
     }
@@ -84,7 +86,8 @@ public class ProviderResource {
     @ApiOperation(value = "Listar fornecedor pelo id")
     @RequestMapping(value = "/provider/{id}", method = RequestMethod.GET)
     public ResponseEntity<Provider> getProviderById(@PathVariable(name = "id") long id) throws NotFoundException {
-        Provider provider = providerRepository.findById(id).orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: $id"));
+        Provider provider = providerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + id));
         return new ResponseEntity<Provider>(provider, HttpStatus.OK);
     }
 

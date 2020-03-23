@@ -35,7 +35,8 @@ public class CategoryResource {
     @RequestMapping(value = "/category/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Category> updateCategory(@PathVariable(value = "id") long id,
                                                    @Valid @RequestBody CategoryValidation categoryValidation) throws NotFoundException {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: " + id));
         category.setId(id);
         category.setName(categoryValidation.getName());
         Category responseCategory = categoryRepository.save(category);
@@ -45,7 +46,8 @@ public class CategoryResource {
     @ApiOperation(value = "Deletar categoria")
     @RequestMapping(value = "/category/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Category> deleteCategory(@PathVariable(name = "id") long id) throws NotFoundException {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: " + id));
         categoryRepository.delete(category);
         return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
     }
@@ -53,7 +55,8 @@ public class CategoryResource {
     @ApiOperation(value = "Listar categoria pelo id")
     @RequestMapping(value = "/category/{id}", method = RequestMethod.GET)
     public ResponseEntity<Category> getCategoryById(@PathVariable(name = "id") long id) throws NotFoundException {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: $id"));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: " + id));
         return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
