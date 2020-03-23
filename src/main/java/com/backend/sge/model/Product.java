@@ -21,8 +21,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ApiModelProperty(value = "Código da categoria")
+    private Long idCategory;
+
     @ApiModelProperty(value = "Código do fornecedor")
     private Long idProvider;
+
+    @ApiModelProperty(value = "Códito da unidade de medida")
+    private Long idMeasurementUnit;
 
     @ApiModelProperty(value = "Nome do produto")
     private String name;
