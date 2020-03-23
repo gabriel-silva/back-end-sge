@@ -1,9 +1,11 @@
 package com.backend.sge.resource;
 
 import com.backend.sge.exception.NotFoundException;
+import com.backend.sge.model.Category;
 import com.backend.sge.model.MeasurementUnit;
 import com.backend.sge.model.Product;
 import com.backend.sge.model.Provider;
+import com.backend.sge.repository.CategoryRepository;
 import com.backend.sge.repository.MeasurementUnitRepository;
 import com.backend.sge.repository.ProductRepository;
 import com.backend.sge.repository.ProviderRepository;
@@ -32,6 +34,9 @@ public class ProductResource {
     @Autowired
     private MeasurementUnitRepository measurementUnitRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @ApiOperation(value = "Cadastrar produto")
     @RequestMapping(value = "/product", method = RequestMethod.POST)
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductValidation productValidation) throws NotFoundException {
@@ -42,9 +47,13 @@ public class ProductResource {
         MeasurementUnit measurementUnit = measurementUnitRepository.findById(productValidation.getIdMeasurementUnit())
                 .orElseThrow(() -> new NotFoundException("Unidade de medida não encontrada com o id :: " + productValidation.getIdMeasurementUnit()));
 
+        Category category = categoryRepository.findById(productValidation.getIdCategory())
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: " + productValidation.getIdCategory()));
+
         Product product = new Product();
         product.setIdProvider(provider.getId());
         product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdCategory(category.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -67,9 +76,13 @@ public class ProductResource {
         Provider provider = providerRepository.findById(productValidation.getIdProvider())
                 .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com o id :: " + productValidation.getIdProvider()));
 
+        Category category = categoryRepository.findById(productValidation.getIdCategory())
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: " + productValidation.getIdCategory()));
+
         product.setId(id);
         product.setIdProvider(provider.getId());
         product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdCategory(category.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());

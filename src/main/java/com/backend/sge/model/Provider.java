@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_provider")
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Provider {
+public class Provider implements Serializable {
 
     @ApiModelProperty(value = "Código")
     @Id
@@ -39,7 +40,4 @@ public class Provider {
     @Embedded
     private Address address;
 
-    @ApiModelProperty(value = "Produtos")
-    @OneToMany(mappedBy = "idProvider")
-    private List<Product> products = new ArrayList<Product>();
 }
