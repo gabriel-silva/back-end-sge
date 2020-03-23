@@ -14,6 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import com.backend.sge.model.*;
+import com.backend.sge.repository.CategoryRepository;
+import com.backend.sge.repository.MeasurementUnitRepository;
+import com.backend.sge.repository.ProviderRepository;
+import com.backend.sge.validation.*;
+import com.fasterxml.jackson.databind.MapperFeature;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.backend.sge.model.Product;
 import com.backend.sge.repository.ProductRepository;
-import com.backend.sge.validation.ProductValidation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ProductResource.class})
@@ -44,9 +48,19 @@ public class ProductResourceTest {
     @MockBean
     private ProductRepository productRepository;
 
+    @MockBean
+    private CategoryRepository categoryRepository;
+
+    @MockBean
+    private MeasurementUnitRepository measurementUnitRepository;
+
+    @MockBean
+    private ProviderRepository providerRepository;
+
     @Before
     public void setUp() {
         objectMapper = new ObjectMapper();
+        objectMapper.disable(MapperFeature.USE_ANNOTATIONS);
         mockMvc = MockMvcBuilders.standaloneSetup(productResource).build();
     }
 
@@ -54,12 +68,76 @@ public class ProductResourceTest {
     public void createProduct() throws Exception {
 
         ProductValidation productValidation = new ProductValidation();
+        productValidation.setIdCategory((long) 1);
+        productValidation.setIdMeasurementUnit((long) 1);
+        productValidation.setIdProvider((long) 1);
         productValidation.setName("Coca-Cola 2LT");
         productValidation.setMinStock(0);
         productValidation.setMaxStock(100);
         productValidation.setStatus(true);
 
+        CategoryValidation categoryValidation = new CategoryValidation();
+        categoryValidation.setName("Bebidas");
+
+        Category category = new Category();
+        category.setId(productValidation.getIdCategory());
+        category.setName(categoryValidation.getName());
+
+        when(categoryRepository.save(any(Category.class))).thenReturn(category);
+        when(categoryRepository.findById((long) 1)).thenReturn(Optional.of(category));
+
+        MeasurementUnitValidation measurementUnitValidation = new MeasurementUnitValidation();
+        measurementUnitValidation.setName("UND");
+
+        MeasurementUnit measurementUnit = new MeasurementUnit();
+        measurementUnit.setId(productValidation.getIdMeasurementUnit());
+        measurementUnit.setName(measurementUnitValidation.getName());
+
+        when(measurementUnitRepository.save(any(MeasurementUnit.class))).thenReturn(measurementUnit);
+        when(measurementUnitRepository.findById((long) 1)).thenReturn(Optional.of(measurementUnit));
+
+        ProviderValidation providerValidation = new ProviderValidation();
+        providerValidation.setName("COCA COLA INDUSTRIAS LTDA");
+        providerValidation.setCnpj("45.997.418/0001-53");
+        providerValidation.setPhone("(21) 3300-3639");
+        providerValidation.setCellPhone("(21) 99933-3639");
+
+        AddressValidation addressValidation = new AddressValidation();
+        addressValidation.setCep("22250-040");
+        addressValidation.setCity("Rio de Janeiro");
+        addressValidation.setComplement("Andar 12 Parte");
+        addressValidation.setNeighborhood("Botafogo");
+        addressValidation.setNumber(374);
+        addressValidation.setPublicPlace("PR de Botafogo");
+        addressValidation.setState("RJ");
+
+        providerValidation.setAddressValidation(addressValidation);
+
+        Provider provider = new Provider();
+        provider.setId(productValidation.getIdProvider());
+        provider.setName(providerValidation.getName());
+        provider.setCnpj(providerValidation.getCnpj());
+        provider.setPhone(providerValidation.getPhone());
+        provider.setCellPhone(providerValidation.getCellPhone());
+
+        Address address = new Address();
+        address.setCep(providerValidation.getAddressValidation().getCep());
+        address.setCity(providerValidation.getAddressValidation().getCity());
+        address.setComplement(providerValidation.getAddressValidation().getComplement());
+        address.setNeighborhood(providerValidation.getAddressValidation().getNeighborhood());
+        address.setNumber(providerValidation.getAddressValidation().getNumber());
+        address.setPublicPlace(providerValidation.getAddressValidation().getPublicPlace());
+        address.setState(providerValidation.getAddressValidation().getState());
+
+        provider.setAddress(address);
+
+        when(providerRepository.save(any(Provider.class))).thenReturn(provider);
+        when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
+
         Product product = new Product();
+        product.setCategory(category);
+        product.setMeasurementUnit(measurementUnit);
+        product.setProvider(provider);
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -71,6 +149,22 @@ public class ProductResourceTest {
                 .content(objectMapper.writeValueAsString(productValidation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.category.id", is(1)))
+                .andExpect(jsonPath("$.category.name", is("Bebidas")))
+                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
+                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
+                .andExpect(jsonPath("$.provider.id", is(1)))
+                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
+                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
+                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
+                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
+                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
+                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
+                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
+                .andExpect(jsonPath("$.provider.address.number", is(374)))
+                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
+                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
                 .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
                 .andExpect(jsonPath("$.minStock", is(0)))
                 .andExpect(jsonPath("$.maxStock", is(100)))
@@ -84,12 +178,76 @@ public class ProductResourceTest {
     public void updateProduct() throws Exception {
 
         ProductValidation productValidation = new ProductValidation();
+        productValidation.setIdCategory((long) 1);
+        productValidation.setIdMeasurementUnit((long) 1);
+        productValidation.setIdProvider((long) 1);
         productValidation.setName("Coca-Cola 2LT");
         productValidation.setMinStock(0);
         productValidation.setMaxStock(100);
         productValidation.setStatus(true);
 
+        CategoryValidation categoryValidation = new CategoryValidation();
+        categoryValidation.setName("Bebidas");
+
+        Category category = new Category();
+        category.setId(productValidation.getIdCategory());
+        category.setName(categoryValidation.getName());
+
+        when(categoryRepository.save(any(Category.class))).thenReturn(category);
+        when(categoryRepository.findById((long) 1)).thenReturn(Optional.of(category));
+
+        MeasurementUnitValidation measurementUnitValidation = new MeasurementUnitValidation();
+        measurementUnitValidation.setName("UND");
+
+        MeasurementUnit measurementUnit = new MeasurementUnit();
+        measurementUnit.setId(productValidation.getIdMeasurementUnit());
+        measurementUnit.setName(measurementUnitValidation.getName());
+
+        when(measurementUnitRepository.save(any(MeasurementUnit.class))).thenReturn(measurementUnit);
+        when(measurementUnitRepository.findById((long) 1)).thenReturn(Optional.of(measurementUnit));
+
+        ProviderValidation providerValidation = new ProviderValidation();
+        providerValidation.setName("COCA COLA INDUSTRIAS LTDA");
+        providerValidation.setCnpj("45.997.418/0001-53");
+        providerValidation.setPhone("(21) 3300-3639");
+        providerValidation.setCellPhone("(21) 99933-3639");
+
+        AddressValidation addressValidation = new AddressValidation();
+        addressValidation.setCep("22250-040");
+        addressValidation.setCity("Rio de Janeiro");
+        addressValidation.setComplement("Andar 12 Parte");
+        addressValidation.setNeighborhood("Botafogo");
+        addressValidation.setNumber(374);
+        addressValidation.setPublicPlace("PR de Botafogo");
+        addressValidation.setState("RJ");
+
+        providerValidation.setAddressValidation(addressValidation);
+
+        Provider provider = new Provider();
+        provider.setId(productValidation.getIdProvider());
+        provider.setName(providerValidation.getName());
+        provider.setCnpj(providerValidation.getCnpj());
+        provider.setPhone(providerValidation.getPhone());
+        provider.setCellPhone(providerValidation.getCellPhone());
+
+        Address address = new Address();
+        address.setCep(providerValidation.getAddressValidation().getCep());
+        address.setCity(providerValidation.getAddressValidation().getCity());
+        address.setComplement(providerValidation.getAddressValidation().getComplement());
+        address.setNeighborhood(providerValidation.getAddressValidation().getNeighborhood());
+        address.setNumber(providerValidation.getAddressValidation().getNumber());
+        address.setPublicPlace(providerValidation.getAddressValidation().getPublicPlace());
+        address.setState(providerValidation.getAddressValidation().getState());
+
+        provider.setAddress(address);
+
+        when(providerRepository.save(any(Provider.class))).thenReturn(provider);
+        when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
+
         Product product = new Product();
+        product.setCategory(category);
+        product.setMeasurementUnit(measurementUnit);
+        product.setProvider(provider);
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -103,6 +261,22 @@ public class ProductResourceTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.category.id", is(1)))
+                .andExpect(jsonPath("$.category.name", is("Bebidas")))
+                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
+                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
+                .andExpect(jsonPath("$.provider.id", is(1)))
+                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
+                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
+                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
+                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
+                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
+                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
+                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
+                .andExpect(jsonPath("$.provider.address.number", is(374)))
+                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
+                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
                 .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
                 .andExpect(jsonPath("$.minStock", is(0)))
                 .andExpect(jsonPath("$.maxStock", is(100)))
@@ -113,8 +287,69 @@ public class ProductResourceTest {
     @Test
     public void getProductById() throws Exception {
 
+        ProductValidation productValidation = new ProductValidation();
+        productValidation.setIdCategory((long) 1);
+        productValidation.setIdMeasurementUnit((long) 1);
+        productValidation.setIdProvider((long) 1);
+        productValidation.setName("Coca-Cola 2LT");
+        productValidation.setMinStock(0);
+        productValidation.setMaxStock(100);
+        productValidation.setStatus(true);
+
+        CategoryValidation categoryValidation = new CategoryValidation();
+        categoryValidation.setName("Bebidas");
+
+        Category category = new Category();
+        category.setId(productValidation.getIdCategory());
+        category.setName(categoryValidation.getName());
+
+        MeasurementUnitValidation measurementUnitValidation = new MeasurementUnitValidation();
+        measurementUnitValidation.setName("UND");
+
+        MeasurementUnit measurementUnit = new MeasurementUnit();
+        measurementUnit.setId(productValidation.getIdMeasurementUnit());
+        measurementUnit.setName(measurementUnitValidation.getName());
+
+        ProviderValidation providerValidation = new ProviderValidation();
+        providerValidation.setName("COCA COLA INDUSTRIAS LTDA");
+        providerValidation.setCnpj("45.997.418/0001-53");
+        providerValidation.setPhone("(21) 3300-3639");
+        providerValidation.setCellPhone("(21) 99933-3639");
+
+        AddressValidation addressValidation = new AddressValidation();
+        addressValidation.setCep("22250-040");
+        addressValidation.setCity("Rio de Janeiro");
+        addressValidation.setComplement("Andar 12 Parte");
+        addressValidation.setNeighborhood("Botafogo");
+        addressValidation.setNumber(374);
+        addressValidation.setPublicPlace("PR de Botafogo");
+        addressValidation.setState("RJ");
+
+        providerValidation.setAddressValidation(addressValidation);
+
+        Provider provider = new Provider();
+        provider.setId(productValidation.getIdProvider());
+        provider.setName(providerValidation.getName());
+        provider.setCnpj(providerValidation.getCnpj());
+        provider.setPhone(providerValidation.getPhone());
+        provider.setCellPhone(providerValidation.getCellPhone());
+
+        Address address = new Address();
+        address.setCep(providerValidation.getAddressValidation().getCep());
+        address.setCity(providerValidation.getAddressValidation().getCity());
+        address.setComplement(providerValidation.getAddressValidation().getComplement());
+        address.setNeighborhood(providerValidation.getAddressValidation().getNeighborhood());
+        address.setNumber(providerValidation.getAddressValidation().getNumber());
+        address.setPublicPlace(providerValidation.getAddressValidation().getPublicPlace());
+        address.setState(providerValidation.getAddressValidation().getState());
+
+        provider.setAddress(address);
+
         Product product = new Product();
         product.setId((long) 1);
+        product.setCategory(category);
+        product.setMeasurementUnit(measurementUnit);
+        product.setProvider(provider);
         product.setName("Coca-Cola 2LT");
         product.setMinStock(0);
         product.setMaxStock(100);
@@ -126,6 +361,22 @@ public class ProductResourceTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.category.id", is(1)))
+                .andExpect(jsonPath("$.category.name", is("Bebidas")))
+                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
+                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
+                .andExpect(jsonPath("$.provider.id", is(1)))
+                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
+                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
+                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
+                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
+                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
+                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
+                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
+                .andExpect(jsonPath("$.provider.address.number", is(374)))
+                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
+                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
                 .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
                 .andExpect(jsonPath("$.minStock", is(0)))
                 .andExpect(jsonPath("$.maxStock", is(100)))
