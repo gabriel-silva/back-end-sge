@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -20,6 +21,7 @@ public class ProductEntryValidation {
 
     @NotNull(message = "quantidade é obrigatório")
     @PositiveOrZero(message = "quantidade não pode ser negativo")
+    @Range(min = 1, message = "quantidade deve ser maior que zero")
     private Integer qtd;
 
     @NotNull(message = "valor unitário é obrigatório")
