@@ -1,5 +1,7 @@
 package com.backend.sge.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +19,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
+@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class ProductExist implements Serializable {
 
     @ApiModelProperty(value = "Código")
@@ -24,8 +27,10 @@ public class ProductExist implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ApiModelProperty(value = "Código do produto")
-    private Long idProduct;
+    @ApiModelProperty(value = "Produto")
+    @ManyToOne
+    @JoinColumn(name = "id_product", referencedColumnName = "id")
+    private Product product;
 
     @ApiModelProperty(value = "Quantidade do estoque")
     private Integer qtd;

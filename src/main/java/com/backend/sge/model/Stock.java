@@ -1,5 +1,7 @@
 package com.backend.sge.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +17,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
+@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class Stock implements Serializable {
 
     @ApiModelProperty(value = "Código")

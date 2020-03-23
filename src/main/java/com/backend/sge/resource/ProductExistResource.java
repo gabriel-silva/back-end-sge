@@ -52,7 +52,7 @@ public class ProductExistResource {
 
                 // criação do objeto de saída de produto e inserção na tabela
                 ProductExist productExist = new ProductExist();
-                productExist.setIdProduct(product.getId());
+                productExist.setProduct(product);
                 productExist.setQtd(productExistValidation.getQtd());
                 productExist.setUnitaryValue(productExistValidation.getUnitaryValue());
 
@@ -93,7 +93,7 @@ public class ProductExistResource {
 
                 // criação do objeto de saída de produto e inserção na tabela
                 productExist.setId(productExist.getId());
-                productExist.setIdProduct(product.getId());
+                productExist.setProduct(product);
                 productExist.setQtd(productExistValidation.getQtd());
                 productExist.setUnitaryValue(productExistValidation.getUnitaryValue());
 
