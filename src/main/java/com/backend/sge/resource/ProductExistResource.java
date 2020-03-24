@@ -44,7 +44,7 @@ public class ProductExistResource {
         Integer sumStockByIdProduct = stockRepository.sumStockByIdProduct(productExistValidation.getIdProduct());
 
         //caso o sumStockByIdProduct for diferente de nulo
-        if (sumStockByIdProduct != null) {
+        if (sumStockByIdProduct != null && sumStockByIdProduct > 0) {
             Integer subStockQtdProductExistQtd = (sumStockByIdProduct - productExistValidation.getQtd());
 
             //verifica se o máximo do estoque em produto é maior que o somatório da quantidade do estoque mais a quantidade passada pelo o usuário
@@ -86,7 +86,7 @@ public class ProductExistResource {
         Integer sumStockByIdProduct = stockRepository.sumStockByIdProduct(productExistValidation.getIdProduct());
 
         //caso o sumStockByIdProduct for diferente de nulo
-        if (sumStockByIdProduct != null) {
+        if (sumStockByIdProduct != null && sumStockByIdProduct > 0) {
 
             //verifica se máximo do estoque é igual ou que a quantidade informada pelo o usuário
             if (productExistValidation.getQtd() >= product.getMinStock()) {
