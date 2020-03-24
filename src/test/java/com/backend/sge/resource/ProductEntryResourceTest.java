@@ -1,6 +1,7 @@
 package com.backend.sge.resource;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,9 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Optional;
 
 import com.backend.sge.model.*;
-import com.backend.sge.repository.CategoryRepository;
-import com.backend.sge.repository.MeasurementUnitRepository;
-import com.backend.sge.repository.ProviderRepository;
+import com.backend.sge.repository.*;
 import com.backend.sge.validation.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,18 +30,23 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.backend.sge.repository.ProductRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ProductResource.class})
-public class ProductResourceTest {
+@ContextConfiguration(classes = {ProductEntryResource.class})
+public class ProductEntryResourceTest {
 
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ProductResource productResource;
+    private ProductEntryResource productEntryResource;
 
     private MockMvc mockMvc;
+
+    @MockBean
+    private StockRepository stockRepository;
+
+    @MockBean
+    private ProductEntryRepository productEntryRepository;
 
     @MockBean
     private ProductRepository productRepository;
@@ -59,11 +63,16 @@ public class ProductResourceTest {
     @Before
     public void setUp() {
         objectMapper = new ObjectMapper();
-        mockMvc = MockMvcBuilders.standaloneSetup(productResource).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(productEntryResource).build();
     }
 
     @Test
-    public void createProduct() throws Exception {
+    public void createProductEntry() throws Exception {
+
+        ProductEntryValidation productEntryValidation = new ProductEntryValidation();
+        productEntryValidation.setIdProduct((long) 1);
+        productEntryValidation.setQtd(100);
+        productEntryValidation.setUnitaryValue(2.50);
 
         ProductValidation productValidation = new ProductValidation();
         productValidation.setIdCategory((long) 1);
@@ -133,6 +142,7 @@ public class ProductResourceTest {
         when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
 
         Product product = new Product();
+        product.setId(productEntryValidation.getIdProduct());
         product.setCategory(category);
         product.setMeasurementUnit(measurementUnit);
         product.setProvider(provider);
@@ -142,38 +152,54 @@ public class ProductResourceTest {
         product.setStatus(productValidation.getStatus());
 
         when(productRepository.save(any(Product.class))).thenReturn(product);
+        when(productRepository.findByStatusIsTrueAndId((long) 1)).thenReturn(Optional.of(product));
 
-        mockMvc.perform(post("/api/product")
-                .content(objectMapper.writeValueAsString(productValidation))
+        ProductEntry productEntry = new ProductEntry();
+        productEntry.setProduct(product);
+        productEntry.setQtd(productEntryValidation.getQtd());
+        productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
+
+        when(productEntryRepository.save(any(ProductEntry.class))).thenReturn(productEntry);
+
+        mockMvc.perform(post("/api/productEntry")
+                .content(objectMapper.writeValueAsString(productEntryValidation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.category.id", is(1)))
-                .andExpect(jsonPath("$.category.name", is("Bebidas")))
-                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
-                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
-                .andExpect(jsonPath("$.provider.id", is(1)))
-                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
-                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
-                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
-                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
-                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
-                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
-                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
-                .andExpect(jsonPath("$.provider.address.number", is(374)))
-                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
-                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
-                .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
-                .andExpect(jsonPath("$.minStock", is(0)))
-                .andExpect(jsonPath("$.maxStock", is(100)))
-                .andExpect(jsonPath("$.status", is(true)));
+                .andExpect(jsonPath("$.qtd", is(100)))
+                .andExpect(jsonPath("$.unitaryValue", is(2.50)))
+                .andExpect(jsonPath("$.product.id", is(1)))
+                .andExpect(jsonPath("$.product.category.id", is(1)))
+                .andExpect(jsonPath("$.product.category.name", is("Bebidas")))
+                .andExpect(jsonPath("$.product.measurementUnit.id", is(1)))
+                .andExpect(jsonPath("$.product.measurementUnit.name", is("UND")))
+                .andExpect(jsonPath("$.product.provider.id", is(1)))
+                .andExpect(jsonPath("$.product.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+                .andExpect(jsonPath("$.product.provider.cnpj", is("45.997.418/0001-53")))
+                .andExpect(jsonPath("$.product.provider.phone", is("(21) 3300-3639")))
+                .andExpect(jsonPath("$.product.provider.cellPhone", is("(21) 99933-3639")))
+                .andExpect(jsonPath("$.product.provider.address.cep", is("22250-040")))
+                .andExpect(jsonPath("$.product.provider.address.city", is("Rio de Janeiro")))
+                .andExpect(jsonPath("$.product.provider.address.complement", is("Andar 12 Parte")))
+                .andExpect(jsonPath("$.product.provider.address.neighborhood", is("Botafogo")))
+                .andExpect(jsonPath("$.product.provider.address.number", is(374)))
+                .andExpect(jsonPath("$.product.provider.address.publicPlace", is("PR de Botafogo")))
+                .andExpect(jsonPath("$.product.provider.address.state", is("RJ")))
+                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
+                .andExpect(jsonPath("$.product.minStock", is(0)))
+                .andExpect(jsonPath("$.product.maxStock", is(100)))
+                .andExpect(jsonPath("$.product.status", is(true)));
 
-        verify(productRepository).save(any(Product.class));
+        verify(productEntryRepository).save(any(ProductEntry.class));
 
     }
 
     @Test
-    public void updateProduct() throws Exception {
+    public void updateProductEntry() throws Exception {
+
+        ProductEntryValidation productEntryValidation = new ProductEntryValidation();
+        productEntryValidation.setIdProduct((long) 1);
+        productEntryValidation.setQtd(100);
+        productEntryValidation.setUnitaryValue(2.50);
 
         ProductValidation productValidation = new ProductValidation();
         productValidation.setIdCategory((long) 1);
@@ -243,6 +269,7 @@ public class ProductResourceTest {
         when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
 
         Product product = new Product();
+        product.setId(productEntryValidation.getIdProduct());
         product.setCategory(category);
         product.setMeasurementUnit(measurementUnit);
         product.setProvider(provider);
@@ -251,39 +278,55 @@ public class ProductResourceTest {
         product.setMaxStock(productValidation.getMaxStock());
         product.setStatus(productValidation.getStatus());
 
-        when(productRepository.findById((long) 1)).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);
+        when(productRepository.findByStatusIsTrueAndId((long) 1)).thenReturn(Optional.of(product));
 
-        mockMvc.perform(put("/api/product/1")
-                .content(objectMapper.writeValueAsString(productValidation))
+        ProductEntry productEntry = new ProductEntry();
+        productEntry.setProduct(product);
+        productEntry.setQtd(productEntryValidation.getQtd());
+        productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
+
+        when(productEntryRepository.findById((long) 1)).thenReturn(Optional.of(productEntry));
+        when(productEntryRepository.save(any(ProductEntry.class))).thenReturn(productEntry);
+
+        mockMvc.perform(put("/api/productEntry/1")
+                .content(objectMapper.writeValueAsString(productEntryValidation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.category.id", is(1)))
-                .andExpect(jsonPath("$.category.name", is("Bebidas")))
-                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
-                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
-                .andExpect(jsonPath("$.provider.id", is(1)))
-                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
-                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
-                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
-                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
-                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
-                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
-                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
-                .andExpect(jsonPath("$.provider.address.number", is(374)))
-                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
-                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
-                .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
-                .andExpect(jsonPath("$.minStock", is(0)))
-                .andExpect(jsonPath("$.maxStock", is(100)))
-                .andExpect(jsonPath("$.status", is(true)));
+                .andExpect(jsonPath("$.qtd", is(100)))
+                .andExpect(jsonPath("$.unitaryValue", is(2.50)))
+                .andExpect(jsonPath("$.product.id", is(1)))
+                .andExpect(jsonPath("$.product.category.id", is(1)))
+                .andExpect(jsonPath("$.product.category.name", is("Bebidas")))
+                .andExpect(jsonPath("$.product.measurementUnit.id", is(1)))
+                .andExpect(jsonPath("$.product.measurementUnit.name", is("UND")))
+                .andExpect(jsonPath("$.product.provider.id", is(1)))
+                .andExpect(jsonPath("$.product.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+                .andExpect(jsonPath("$.product.provider.cnpj", is("45.997.418/0001-53")))
+                .andExpect(jsonPath("$.product.provider.phone", is("(21) 3300-3639")))
+                .andExpect(jsonPath("$.product.provider.cellPhone", is("(21) 99933-3639")))
+                .andExpect(jsonPath("$.product.provider.address.cep", is("22250-040")))
+                .andExpect(jsonPath("$.product.provider.address.city", is("Rio de Janeiro")))
+                .andExpect(jsonPath("$.product.provider.address.complement", is("Andar 12 Parte")))
+                .andExpect(jsonPath("$.product.provider.address.neighborhood", is("Botafogo")))
+                .andExpect(jsonPath("$.product.provider.address.number", is(374)))
+                .andExpect(jsonPath("$.product.provider.address.publicPlace", is("PR de Botafogo")))
+                .andExpect(jsonPath("$.product.provider.address.state", is("RJ")))
+                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
+                .andExpect(jsonPath("$.product.minStock", is(0)))
+                .andExpect(jsonPath("$.product.maxStock", is(100)))
+                .andExpect(jsonPath("$.product.status", is(true)));
 
     }
 
     @Test
-    public void getProductById() throws Exception {
+    public void getProductEntryById() throws Exception {
+
+        ProductEntryValidation productEntryValidation = new ProductEntryValidation();
+        productEntryValidation.setIdProduct((long) 1);
+        productEntryValidation.setQtd(100);
+        productEntryValidation.setUnitaryValue(2.50);
 
         ProductValidation productValidation = new ProductValidation();
         productValidation.setIdCategory((long) 1);
@@ -294,118 +337,55 @@ public class ProductResourceTest {
         productValidation.setMaxStock(100);
         productValidation.setStatus(true);
 
-        CategoryValidation categoryValidation = new CategoryValidation();
-        categoryValidation.setName("Bebidas");
-
-        Category category = new Category();
-        category.setId(productValidation.getIdCategory());
-        category.setName(categoryValidation.getName());
-
-        MeasurementUnitValidation measurementUnitValidation = new MeasurementUnitValidation();
-        measurementUnitValidation.setName("UND");
-
-        MeasurementUnit measurementUnit = new MeasurementUnit();
-        measurementUnit.setId(productValidation.getIdMeasurementUnit());
-        measurementUnit.setName(measurementUnitValidation.getName());
-
-        ProviderValidation providerValidation = new ProviderValidation();
-        providerValidation.setName("COCA COLA INDUSTRIAS LTDA");
-        providerValidation.setCnpj("45.997.418/0001-53");
-        providerValidation.setPhone("(21) 3300-3639");
-        providerValidation.setCellPhone("(21) 99933-3639");
-
-        AddressValidation addressValidation = new AddressValidation();
-        addressValidation.setCep("22250-040");
-        addressValidation.setCity("Rio de Janeiro");
-        addressValidation.setComplement("Andar 12 Parte");
-        addressValidation.setNeighborhood("Botafogo");
-        addressValidation.setNumber(374);
-        addressValidation.setPublicPlace("PR de Botafogo");
-        addressValidation.setState("RJ");
-
-        providerValidation.setAddressValidation(addressValidation);
-
-        Provider provider = new Provider();
-        provider.setId(productValidation.getIdProvider());
-        provider.setName(providerValidation.getName());
-        provider.setCnpj(providerValidation.getCnpj());
-        provider.setPhone(providerValidation.getPhone());
-        provider.setCellPhone(providerValidation.getCellPhone());
-
-        Address address = new Address();
-        address.setCep(providerValidation.getAddressValidation().getCep());
-        address.setCity(providerValidation.getAddressValidation().getCity());
-        address.setComplement(providerValidation.getAddressValidation().getComplement());
-        address.setNeighborhood(providerValidation.getAddressValidation().getNeighborhood());
-        address.setNumber(providerValidation.getAddressValidation().getNumber());
-        address.setPublicPlace(providerValidation.getAddressValidation().getPublicPlace());
-        address.setState(providerValidation.getAddressValidation().getState());
-
-        provider.setAddress(address);
-
         Product product = new Product();
-        product.setId((long) 1);
-        product.setCategory(category);
-        product.setMeasurementUnit(measurementUnit);
-        product.setProvider(provider);
-        product.setName("Coca-Cola 2LT");
-        product.setMinStock(0);
-        product.setMaxStock(100);
-        product.setStatus(true);
+        product.setName(productValidation.getName());
+        product.setMinStock(productValidation.getMinStock());
+        product.setMaxStock(productValidation.getMaxStock());
+        product.setStatus(productValidation.getStatus());
 
-        when(productRepository.findById((long) 1)).thenReturn(Optional.of(product));
+        ProductEntry productEntry = new ProductEntry();
+        productEntry.setId((long) 1);
+        productEntry.setProduct(product);
+        productEntry.setQtd(productEntryValidation.getQtd());
+        productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
 
-        mockMvc.perform(get("/api/product/1")
+        when(productEntryRepository.findById((long) 1)).thenReturn(Optional.of(productEntry));
+
+        mockMvc.perform(get("/api/productEntry/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.category.id", is(1)))
-                .andExpect(jsonPath("$.category.name", is("Bebidas")))
-                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
-                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
-                .andExpect(jsonPath("$.provider.id", is(1)))
-                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
-                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
-                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
-                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
-                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
-                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
-                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
-                .andExpect(jsonPath("$.provider.address.number", is(374)))
-                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
-                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
-                .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
-                .andExpect(jsonPath("$.minStock", is(0)))
-                .andExpect(jsonPath("$.maxStock", is(100)))
-                .andExpect(jsonPath("$.status", is(true)));
+                .andExpect(jsonPath("$.qtd", is(100)))
+                .andExpect(jsonPath("$.unitaryValue", is(2.50)))
+                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
+                .andExpect(jsonPath("$.product.minStock", is(0)))
+                .andExpect(jsonPath("$.product.maxStock", is(100)))
+                .andExpect(jsonPath("$.product.status", is(true)));
 
-        verify(productRepository).findById((long) 1);
+        verify(productEntryRepository).findById((long) 1);
 
     }
 
     @Test
-    public void getProductByIdNotFound() throws Exception {
-        mockMvc.perform(get("/api/product/2"))
+    public void getProductEntryByIdNotFound() throws Exception {
+        mockMvc.perform(get("/api/productEntry/2"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void deleteProduct() throws Exception {
+    public void deleteProductEntry() throws Exception {
 
-        Product product = new Product();
-        product.setId((long) 1);
-        product.setName("Coca-Cola 2LT");
-        product.setMinStock(0);
-        product.setMaxStock(100);
-        product.setStatus(true);
+        ProductEntry productEntry = new ProductEntry();
+        productEntry.setId((long) 1);
+        productEntry.setQtd(100);
+        productEntry.setUnitaryValue(2.50);
 
-        when(productRepository.findById((long) 1)).thenReturn(Optional.of(product));
+        when(productEntryRepository.findById((long) 1)).thenReturn(Optional.of(productEntry));
 
-        mockMvc.perform(delete("/api/product/1"))
+        mockMvc.perform(delete("/api/productEntry/1"))
                 .andExpect(status().isNoContent());
 
-        verify(productRepository, times(1)).delete(product);
+        verify(productEntryRepository, times(1)).delete(productEntry);
 
     }
 

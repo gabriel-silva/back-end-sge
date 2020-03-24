@@ -92,7 +92,7 @@ public class ProductExistResource {
             if (productExistValidation.getQtd() >= product.getMinStock()) {
 
                 // criação do objeto de saída de produto e inserção na tabela
-                productExist.setId(productExist.getId());
+                productExist.setId(id);
                 productExist.setProduct(product);
                 productExist.setQtd(productExistValidation.getQtd());
                 productExist.setUnitaryValue(productExistValidation.getUnitaryValue());

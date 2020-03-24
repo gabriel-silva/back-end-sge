@@ -100,7 +100,7 @@ public class ProductEntryResource {
             if (product.getMaxStock() >= productEntryValidation.getQtd()) {
 
                 // criação do objeto de entrada de produto e inserção na tabela
-                productEntry.setId(productEntry.getId());
+                productEntry.setId(id);
                 productEntry.setProduct(product);
                 productEntry.setQtd(productEntryValidation.getQtd());
                 productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
