@@ -3,7 +3,7 @@ package com.backend.sge.resource;
 import com.backend.sge.exception.BadRequestException;
 import com.backend.sge.exception.NotFoundException;
 import com.backend.sge.model.Product;
-import com.backend.sge.model.ProductEntry;
+import com.backend.sge.model.ProductInput;
 import com.backend.sge.repository.ProductEntryRepository;
 import com.backend.sge.repository.ProductRepository;
 import com.backend.sge.repository.StockRepository;
@@ -34,7 +34,7 @@ public class ProductEntryResource {
 
     @ApiOperation(value = "Cadastrar entrada de produtos")
     @RequestMapping(value = "/productEntry", method = RequestMethod.POST)
-    public ResponseEntity<ProductEntry> createProductEntry(@Valid @RequestBody ProductEntryValidation productEntryValidation) throws NotFoundException, BadRequestException {
+    public ResponseEntity<ProductInput> createProductEntry(@Valid @RequestBody ProductEntryValidation productEntryValidation) throws NotFoundException, BadRequestException {
 
         //busca produto pelo id passado no productEntryValidation
         Product product = productRepository.findByStatusIsTrueAndId(productEntryValidation.getIdProduct())
@@ -51,13 +51,13 @@ public class ProductEntryResource {
             if (product.getMaxStock() >= sumStockQtdProductEntryQtd) {
 
                 // criação do objeto de entrada de produto e inserção na tabela
-                ProductEntry productEntry = new ProductEntry();
-                productEntry.setProduct(product);
-                productEntry.setQtd(productEntryValidation.getQtd());
-                productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
+                ProductInput productInput = new ProductInput();
+                productInput.setProduct(product);
+                productInput.setQtd(productEntryValidation.getQtd());
+                productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
 
-                ProductEntry responseProductEntry = productEntryRepository.save(productEntry);
-                return new ResponseEntity<ProductEntry>(responseProductEntry, HttpStatus.CREATED);
+                ProductInput responseProductInput = productEntryRepository.save(productInput);
+                return new ResponseEntity<ProductInput>(responseProductInput, HttpStatus.CREATED);
 
             } else {
                 throw new BadRequestException("Quantidade máxima de produtos excedida!");
@@ -65,13 +65,13 @@ public class ProductEntryResource {
 
         } else {
             // criação do objeto de entrada de produto e inserção na tabela
-            ProductEntry productEntry = new ProductEntry();
-            productEntry.setProduct(product);
-            productEntry.setQtd(productEntryValidation.getQtd());
-            productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
+            ProductInput productInput = new ProductInput();
+            productInput.setProduct(product);
+            productInput.setQtd(productEntryValidation.getQtd());
+            productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
 
-            ProductEntry responseProductEntry = productEntryRepository.save(productEntry);
-            return new ResponseEntity<ProductEntry>(responseProductEntry, HttpStatus.CREATED);
+            ProductInput responseProductInput = productEntryRepository.save(productInput);
+            return new ResponseEntity<ProductInput>(responseProductInput, HttpStatus.CREATED);
 
         }
 
@@ -79,11 +79,11 @@ public class ProductEntryResource {
 
     @ApiOperation(value = "Atualizar entrada de produtos")
     @RequestMapping(value = "/productEntry/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<ProductEntry> updateProductEntry(@PathVariable(value = "id") long id,
+    public ResponseEntity<ProductInput> updateProductEntry(@PathVariable(value = "id") long id,
                                                            @Valid @RequestBody ProductEntryValidation productEntryValidation) throws NotFoundException, BadRequestException {
 
         //busca entrada de produto pelo id passado via paramentro na requisição
-        ProductEntry productEntry = productEntryRepository.findById(id)
+        ProductInput productInput = productEntryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entrada de Produto não encontrado com o id :: " + id));
 
         //busca produto pelo id passado no productEntryValidation
@@ -100,13 +100,13 @@ public class ProductEntryResource {
             if (product.getMaxStock() >= productEntryValidation.getQtd()) {
 
                 // criação do objeto de entrada de produto e inserção na tabela
-                productEntry.setId(id);
-                productEntry.setProduct(product);
-                productEntry.setQtd(productEntryValidation.getQtd());
-                productEntry.setUnitaryValue(productEntryValidation.getUnitaryValue());
+                productInput.setId(id);
+                productInput.setProduct(product);
+                productInput.setQtd(productEntryValidation.getQtd());
+                productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
 
-                ProductEntry responseProductEntry = productEntryRepository.save(productEntry);
-                return new ResponseEntity<ProductEntry>(responseProductEntry, HttpStatus.NO_CONTENT);
+                ProductInput responseProductInput = productEntryRepository.save(productInput);
+                return new ResponseEntity<ProductInput>(responseProductInput, HttpStatus.NO_CONTENT);
 
             } else {
                 throw new BadRequestException("Quantidade máxima de produtos excedida!");
@@ -120,24 +120,24 @@ public class ProductEntryResource {
 
     @ApiOperation(value = "Deletar entrada de produtos")
     @RequestMapping(value = "/productEntry/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<ProductEntry> deleteProductEntry(@PathVariable(name = "id") long id) throws NotFoundException {
-        ProductEntry productEntry = productEntryRepository.findById(id)
+    public ResponseEntity<ProductInput> deleteProductEntry(@PathVariable(name = "id") long id) throws NotFoundException {
+        ProductInput productInput = productEntryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entrada de Produto não encontrado com o id :: " + id));
-        productEntryRepository.delete(productEntry);
-        return new ResponseEntity<ProductEntry>(HttpStatus.NO_CONTENT);
+        productEntryRepository.delete(productInput);
+        return new ResponseEntity<ProductInput>(HttpStatus.NO_CONTENT);
     }
 
     @ApiOperation(value = "Listar entrada de produtos pelo id")
     @RequestMapping(value = "/productEntry/{id}", method = RequestMethod.GET)
-    public ResponseEntity<ProductEntry> getProductEntryById(@PathVariable(name = "id") long id) throws NotFoundException {
-        ProductEntry productEntry = productEntryRepository.findById(id)
+    public ResponseEntity<ProductInput> getProductEntryById(@PathVariable(name = "id") long id) throws NotFoundException {
+        ProductInput productInput = productEntryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entrada de Produto não encontrado com o id :: " + id));
-        return new ResponseEntity<ProductEntry>(productEntry, HttpStatus.OK);
+        return new ResponseEntity<ProductInput>(productInput, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Listar entrada de produtos")
     @RequestMapping(value = "/productEntry", method = RequestMethod.GET)
-    public Page<ProductEntry> getAllCategories(
+    public Page<ProductInput> getAllCategories(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
         return productEntryRepository.findAll(PageRequest.of(offset, limit));

@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 @ToString
 @EqualsAndHashCode
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class ProductEntry implements Serializable {
+public class ProductInput implements Serializable {
 
     @ApiModelProperty(value = "Código")
     @Id
