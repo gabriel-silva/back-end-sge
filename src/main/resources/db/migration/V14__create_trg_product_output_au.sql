@@ -11,7 +11,7 @@ BEGIN
         UPDATE TB_STOCK SET
             QTD = QTD + (OLD.QTD - NEW.QTD),
             UNITARY_VALUE = NEW.UNITARY_VALUE,
-            UPDATED_AT = NOW()
+            UPDATED_AT = TO_CHAR(NOW(), 'dd/MM/yyyy HH:mm:ss')
         WHERE ID_PRODUCT = NEW.ID_PRODUCT;
 
     END IF;
