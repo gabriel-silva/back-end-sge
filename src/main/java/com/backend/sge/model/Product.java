@@ -56,10 +56,10 @@ public class Product implements Serializable {
 
     @ApiModelProperty(value = "Entrada de Produtos")
     @OneToMany(mappedBy = "product")
-    private List<ProductInput> productEntries = new ArrayList<>();
+    private List<ProductInput> productInputs = new ArrayList<>();
 
     @ApiModelProperty(value = "Saida de Produtos")
     @OneToMany(mappedBy = "product")
-    private List<ProductExist> productExists = new ArrayList<>();
+    private List<ProductOutput> productOutputs = new ArrayList<>();
 
 }

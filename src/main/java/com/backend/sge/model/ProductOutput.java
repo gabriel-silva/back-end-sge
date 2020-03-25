@@ -14,13 +14,13 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "tb_product_exist")
+@Table(name = "tb_product_output")
 @Data
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 @JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
-public class ProductExist implements Serializable {
+public class ProductOutput implements Serializable {
 
     @ApiModelProperty(value = "Código")
     @Id

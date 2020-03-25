@@ -31,13 +31,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ProductEntryResource.class})
+@ContextConfiguration(classes = {ProductInputResource.class})
 public class ProductInputResourceTest {
 
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ProductEntryResource productEntryResource;
+    private ProductInputResource productInputResource;
 
     private MockMvc mockMvc;
 
@@ -45,7 +45,7 @@ public class ProductInputResourceTest {
     private StockRepository stockRepository;
 
     @MockBean
-    private ProductEntryRepository productEntryRepository;
+    private ProductInputRepository productInputRepository;
 
     @MockBean
     private ProductRepository productRepository;
@@ -62,16 +62,16 @@ public class ProductInputResourceTest {
     @Before
     public void setUp() {
         objectMapper = new ObjectMapper();
-        mockMvc = MockMvcBuilders.standaloneSetup(productEntryResource).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(productInputResource).build();
     }
 
     @Test
-    public void createProductEntry() throws Exception {
+    public void createProductInput() throws Exception {
 
-        ProductEntryValidation productEntryValidation = new ProductEntryValidation();
-        productEntryValidation.setIdProduct((long) 1);
-        productEntryValidation.setQtd(100);
-        productEntryValidation.setUnitaryValue(2.50);
+        ProductInputValidation productInputValidation = new ProductInputValidation();
+        productInputValidation.setIdProduct((long) 1);
+        productInputValidation.setQtd(100);
+        productInputValidation.setUnitaryValue(2.50);
 
         ProductValidation productValidation = new ProductValidation();
         productValidation.setIdCategory((long) 1);
@@ -141,7 +141,7 @@ public class ProductInputResourceTest {
         when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
 
         Product product = new Product();
-        product.setId(productEntryValidation.getIdProduct());
+        product.setId(productInputValidation.getIdProduct());
         product.setCategory(category);
         product.setMeasurementUnit(measurementUnit);
         product.setProvider(provider);
@@ -155,13 +155,13 @@ public class ProductInputResourceTest {
 
         ProductInput productInput = new ProductInput();
         productInput.setProduct(product);
-        productInput.setQtd(productEntryValidation.getQtd());
-        productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
+        productInput.setQtd(productInputValidation.getQtd());
+        productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 
-        when(productEntryRepository.save(any(ProductInput.class))).thenReturn(productInput);
+        when(productInputRepository.save(any(ProductInput.class))).thenReturn(productInput);
 
-        mockMvc.perform(post("/api/productEntry")
-                .content(objectMapper.writeValueAsString(productEntryValidation))
+        mockMvc.perform(post("/api/productInput")
+                .content(objectMapper.writeValueAsString(productInputValidation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.qtd", is(100)))
@@ -188,17 +188,17 @@ public class ProductInputResourceTest {
                 .andExpect(jsonPath("$.product.maxStock", is(100)))
                 .andExpect(jsonPath("$.product.status", is(true)));
 
-        verify(productEntryRepository).save(any(ProductInput.class));
+        verify(productInputRepository).save(any(ProductInput.class));
 
     }
 
     @Test
-    public void updateProductEntry() throws Exception {
+    public void updateProductInput() throws Exception {
 
-        ProductEntryValidation productEntryValidation = new ProductEntryValidation();
-        productEntryValidation.setIdProduct((long) 1);
-        productEntryValidation.setQtd(100);
-        productEntryValidation.setUnitaryValue(2.50);
+        ProductInputValidation productInputValidation = new ProductInputValidation();
+        productInputValidation.setIdProduct((long) 1);
+        productInputValidation.setQtd(100);
+        productInputValidation.setUnitaryValue(2.50);
 
         ProductValidation productValidation = new ProductValidation();
         productValidation.setIdCategory((long) 1);
@@ -268,7 +268,7 @@ public class ProductInputResourceTest {
         when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
 
         Product product = new Product();
-        product.setId(productEntryValidation.getIdProduct());
+        product.setId(productInputValidation.getIdProduct());
         product.setCategory(category);
         product.setMeasurementUnit(measurementUnit);
         product.setProvider(provider);
@@ -282,14 +282,14 @@ public class ProductInputResourceTest {
 
         ProductInput productInput = new ProductInput();
         productInput.setProduct(product);
-        productInput.setQtd(productEntryValidation.getQtd());
-        productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
+        productInput.setQtd(productInputValidation.getQtd());
+        productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 
-        when(productEntryRepository.findById((long) 1)).thenReturn(Optional.of(productInput));
-        when(productEntryRepository.save(any(ProductInput.class))).thenReturn(productInput);
+        when(productInputRepository.findById((long) 1)).thenReturn(Optional.of(productInput));
+        when(productInputRepository.save(any(ProductInput.class))).thenReturn(productInput);
 
-        mockMvc.perform(put("/api/productEntry/1")
-                .content(objectMapper.writeValueAsString(productEntryValidation))
+        mockMvc.perform(put("/api/productInput/1")
+                .content(objectMapper.writeValueAsString(productInputValidation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -320,12 +320,12 @@ public class ProductInputResourceTest {
     }
 
     @Test
-    public void getProductEntryById() throws Exception {
+    public void getProductInputById() throws Exception {
 
-        ProductEntryValidation productEntryValidation = new ProductEntryValidation();
-        productEntryValidation.setIdProduct((long) 1);
-        productEntryValidation.setQtd(100);
-        productEntryValidation.setUnitaryValue(2.50);
+        ProductInputValidation productInputValidation = new ProductInputValidation();
+        productInputValidation.setIdProduct((long) 1);
+        productInputValidation.setQtd(100);
+        productInputValidation.setUnitaryValue(2.50);
 
         ProductValidation productValidation = new ProductValidation();
         productValidation.setIdCategory((long) 1);
@@ -345,12 +345,12 @@ public class ProductInputResourceTest {
         ProductInput productInput = new ProductInput();
         productInput.setId((long) 1);
         productInput.setProduct(product);
-        productInput.setQtd(productEntryValidation.getQtd());
-        productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
+        productInput.setQtd(productInputValidation.getQtd());
+        productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 
-        when(productEntryRepository.findById((long) 1)).thenReturn(Optional.of(productInput));
+        when(productInputRepository.findById((long) 1)).thenReturn(Optional.of(productInput));
 
-        mockMvc.perform(get("/api/productEntry/1")
+        mockMvc.perform(get("/api/productInput/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -361,30 +361,30 @@ public class ProductInputResourceTest {
                 .andExpect(jsonPath("$.product.maxStock", is(100)))
                 .andExpect(jsonPath("$.product.status", is(true)));
 
-        verify(productEntryRepository).findById((long) 1);
+        verify(productInputRepository).findById((long) 1);
 
     }
 
     @Test
-    public void getProductEntryByIdNotFound() throws Exception {
-        mockMvc.perform(get("/api/productEntry/2"))
+    public void getProductInputByIdNotFound() throws Exception {
+        mockMvc.perform(get("/api/productInput/2"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void deleteProductEntry() throws Exception {
+    public void deleteProductInput() throws Exception {
 
         ProductInput productInput = new ProductInput();
         productInput.setId((long) 1);
         productInput.setQtd(100);
         productInput.setUnitaryValue(2.50);
 
-        when(productEntryRepository.findById((long) 1)).thenReturn(Optional.of(productInput));
+        when(productInputRepository.findById((long) 1)).thenReturn(Optional.of(productInput));
 
-        mockMvc.perform(delete("/api/productEntry/1"))
+        mockMvc.perform(delete("/api/productInput/1"))
                 .andExpect(status().isNoContent());
 
-        verify(productEntryRepository, times(1)).delete(productInput);
+        verify(productInputRepository, times(1)).delete(productInput);
 
     }
 

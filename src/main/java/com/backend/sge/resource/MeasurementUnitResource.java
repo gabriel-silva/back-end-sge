@@ -62,7 +62,7 @@ public class MeasurementUnitResource {
 
     @ApiOperation(value = "Listar unidade de medidas")
     @RequestMapping(value = "/measurementUnit", method = RequestMethod.GET)
-    public Page<MeasurementUnit> getAllMeasurementsUnits(
+    public Page<MeasurementUnit> getAllMeasurementUnit(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
         return measurementUnitRepository.findAll(PageRequest.of(offset, limit));

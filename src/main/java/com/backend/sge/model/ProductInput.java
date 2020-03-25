@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "tb_product_entry")
+@Table(name = "tb_product_input")
 @Data
 @NoArgsConstructor
 @ToString

@@ -13,7 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class ProductExistValidation {
+public class ProductInputValidation {
 
     @NotNull(message = "código do produto é obrigatório")
     @PositiveOrZero(message = "código do produto não pode ser negativo")

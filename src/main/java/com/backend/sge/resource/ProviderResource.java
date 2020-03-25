@@ -93,7 +93,7 @@ public class ProviderResource {
 
     @ApiOperation(value = "Listar fornecedores")
     @RequestMapping(value = "/provider", method = RequestMethod.GET)
-    public Page<Provider> getAllCategories(
+    public Page<Provider> getAllProvider(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
         return providerRepository.findAll(PageRequest.of(offset, limit));

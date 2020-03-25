@@ -62,7 +62,7 @@ public class CategoryResource {
 
     @ApiOperation(value = "Listar categorias")
     @RequestMapping(value = "/category", method = RequestMethod.GET)
-    public Page<Category> getAllCategories(
+    public Page<Category> getAllCategory(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
         return categoryRepository.findAll(PageRequest.of(offset, limit));

@@ -4,10 +4,10 @@ import com.backend.sge.exception.BadRequestException;
 import com.backend.sge.exception.NotFoundException;
 import com.backend.sge.model.Product;
 import com.backend.sge.model.ProductInput;
-import com.backend.sge.repository.ProductEntryRepository;
+import com.backend.sge.repository.ProductInputRepository;
 import com.backend.sge.repository.ProductRepository;
 import com.backend.sge.repository.StockRepository;
-import com.backend.sge.validation.ProductEntryValidation;
+import com.backend.sge.validation.ProductInputValidation;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,10 +21,10 @@ import javax.validation.Valid;
 @CrossOrigin
 @RestController
 @RequestMapping("/api")
-public class ProductEntryResource {
+public class ProductInputResource {
 
     @Autowired
-    private ProductEntryRepository productEntryRepository;
+    private ProductInputRepository productInputRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -33,30 +33,30 @@ public class ProductEntryResource {
     private StockRepository stockRepository;
 
     @ApiOperation(value = "Cadastrar entrada de produtos")
-    @RequestMapping(value = "/productEntry", method = RequestMethod.POST)
-    public ResponseEntity<ProductInput> createProductEntry(@Valid @RequestBody ProductEntryValidation productEntryValidation) throws NotFoundException, BadRequestException {
+    @RequestMapping(value = "/productInput", method = RequestMethod.POST)
+    public ResponseEntity<ProductInput> createProductInput(@Valid @RequestBody ProductInputValidation productInputValidation) throws NotFoundException, BadRequestException {
 
-        //busca produto pelo id passado no productEntryValidation
-        Product product = productRepository.findByStatusIsTrueAndId(productEntryValidation.getIdProduct())
-                .orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: " + productEntryValidation.getIdProduct()));
+        //busca produto pelo id passado no productInputValidation
+        Product product = productRepository.findByStatusIsTrueAndId(productInputValidation.getIdProduct())
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: " + productInputValidation.getIdProduct()));
 
         //somatório do estoque pelo o id do produto
-        Integer sumStockByIdProduct = stockRepository.sumStockByIdProduct(productEntryValidation.getIdProduct());
+        Integer sumStockByIdProduct = stockRepository.sumStockByIdProduct(productInputValidation.getIdProduct());
 
         //caso o sumStockByIdProduct for diferente de nulo
         if (sumStockByIdProduct != null) {
-            Integer sumStockQtdProductEntryQtd = (sumStockByIdProduct + productEntryValidation.getQtd());
+            Integer sumStockQtdProductInputQtd = (sumStockByIdProduct + productInputValidation.getQtd());
 
             //verifica se o máximo do estoque em produto é maior que o somatório da quantidade do estoque mais a quantidade passada pelo o usuário
-            if (product.getMaxStock() >= sumStockQtdProductEntryQtd) {
+            if (product.getMaxStock() >= sumStockQtdProductInputQtd) {
 
                 // criação do objeto de entrada de produto e inserção na tabela
                 ProductInput productInput = new ProductInput();
                 productInput.setProduct(product);
-                productInput.setQtd(productEntryValidation.getQtd());
-                productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
+                productInput.setQtd(productInputValidation.getQtd());
+                productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 
-                ProductInput responseProductInput = productEntryRepository.save(productInput);
+                ProductInput responseProductInput = productInputRepository.save(productInput);
                 return new ResponseEntity<ProductInput>(responseProductInput, HttpStatus.CREATED);
 
             } else {
@@ -67,10 +67,10 @@ public class ProductEntryResource {
             // criação do objeto de entrada de produto e inserção na tabela
             ProductInput productInput = new ProductInput();
             productInput.setProduct(product);
-            productInput.setQtd(productEntryValidation.getQtd());
-            productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
+            productInput.setQtd(productInputValidation.getQtd());
+            productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 
-            ProductInput responseProductInput = productEntryRepository.save(productInput);
+            ProductInput responseProductInput = productInputRepository.save(productInput);
             return new ResponseEntity<ProductInput>(responseProductInput, HttpStatus.CREATED);
 
         }
@@ -78,34 +78,34 @@ public class ProductEntryResource {
     }
 
     @ApiOperation(value = "Atualizar entrada de produtos")
-    @RequestMapping(value = "/productEntry/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<ProductInput> updateProductEntry(@PathVariable(value = "id") long id,
-                                                           @Valid @RequestBody ProductEntryValidation productEntryValidation) throws NotFoundException, BadRequestException {
+    @RequestMapping(value = "/productInput/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<ProductInput> updateProductInput(@PathVariable(value = "id") long id,
+                                                           @Valid @RequestBody ProductInputValidation productInputValidation) throws NotFoundException, BadRequestException {
 
         //busca entrada de produto pelo id passado via paramentro na requisição
-        ProductInput productInput = productEntryRepository.findById(id)
+        ProductInput productInput = productInputRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entrada de Produto não encontrado com o id :: " + id));
 
-        //busca produto pelo id passado no productEntryValidation
-        Product product = productRepository.findByStatusIsTrueAndId(productEntryValidation.getIdProduct())
-                .orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: " + productEntryValidation.getIdProduct()));
+        //busca produto pelo id passado no productInputValidation
+        Product product = productRepository.findByStatusIsTrueAndId(productInputValidation.getIdProduct())
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado com o id :: " + productInputValidation.getIdProduct()));
 
         //somatório do estoque pelo o id do produto
-        Integer sumStockByIdProduct = stockRepository.sumStockByIdProduct(productEntryValidation.getIdProduct());
+        Integer sumStockByIdProduct = stockRepository.sumStockByIdProduct(productInputValidation.getIdProduct());
 
         //caso o sumStockByIdProduct for diferente de nulo
         if (sumStockByIdProduct != null) {
 
            //verifica se máximo do estoque é igual ou que a quantidade informada pelo o usuário
-            if (product.getMaxStock() >= productEntryValidation.getQtd()) {
+            if (product.getMaxStock() >= productInputValidation.getQtd()) {
 
                 // criação do objeto de entrada de produto e inserção na tabela
                 productInput.setId(id);
                 productInput.setProduct(product);
-                productInput.setQtd(productEntryValidation.getQtd());
-                productInput.setUnitaryValue(productEntryValidation.getUnitaryValue());
+                productInput.setQtd(productInputValidation.getQtd());
+                productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 
-                ProductInput responseProductInput = productEntryRepository.save(productInput);
+                ProductInput responseProductInput = productInputRepository.save(productInput);
                 return new ResponseEntity<ProductInput>(responseProductInput, HttpStatus.NO_CONTENT);
 
             } else {
@@ -119,28 +119,28 @@ public class ProductEntryResource {
     }
 
     @ApiOperation(value = "Deletar entrada de produtos")
-    @RequestMapping(value = "/productEntry/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<ProductInput> deleteProductEntry(@PathVariable(name = "id") long id) throws NotFoundException {
-        ProductInput productInput = productEntryRepository.findById(id)
+    @RequestMapping(value = "/productInput/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<ProductInput> deleteProductInput(@PathVariable(name = "id") long id) throws NotFoundException {
+        ProductInput productInput = productInputRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entrada de Produto não encontrado com o id :: " + id));
-        productEntryRepository.delete(productInput);
+        productInputRepository.delete(productInput);
         return new ResponseEntity<ProductInput>(HttpStatus.NO_CONTENT);
     }
 
     @ApiOperation(value = "Listar entrada de produtos pelo id")
-    @RequestMapping(value = "/productEntry/{id}", method = RequestMethod.GET)
-    public ResponseEntity<ProductInput> getProductEntryById(@PathVariable(name = "id") long id) throws NotFoundException {
-        ProductInput productInput = productEntryRepository.findById(id)
+    @RequestMapping(value = "/productInput/{id}", method = RequestMethod.GET)
+    public ResponseEntity<ProductInput> getProductInputById(@PathVariable(name = "id") long id) throws NotFoundException {
+        ProductInput productInput = productInputRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Entrada de Produto não encontrado com o id :: " + id));
         return new ResponseEntity<ProductInput>(productInput, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Listar entrada de produtos")
-    @RequestMapping(value = "/productEntry", method = RequestMethod.GET)
-    public Page<ProductInput> getAllCategories(
+    @RequestMapping(value = "/productInput", method = RequestMethod.GET)
+    public Page<ProductInput> getAllProductInput(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
-        return productEntryRepository.findAll(PageRequest.of(offset, limit));
+        return productInputRepository.findAll(PageRequest.of(offset, limit));
     }
 
 }

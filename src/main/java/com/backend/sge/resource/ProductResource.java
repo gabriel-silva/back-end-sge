@@ -110,7 +110,7 @@ public class ProductResource {
 
     @ApiOperation(value = "Listar produtos")
     @RequestMapping(value = "/product", method = RequestMethod.GET)
-    public Page<Product> getAllCategories(
+    public Page<Product> getAllProduct(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "10") int limit) {
         return productRepository.findAll(PageRequest.of(offset, limit));
