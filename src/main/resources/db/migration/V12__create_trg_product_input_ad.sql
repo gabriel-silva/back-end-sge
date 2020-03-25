@@ -5,13 +5,14 @@ CREATE OR REPLACE FUNCTION FUNC_PRODUCT_INPUT_AD()
 
 BEGIN
 
+    SET datestyle = dmy;
     SELECT COUNT(*) INTO COUNT_STOCK FROM TB_STOCK WHERE ID_PRODUCT = OLD.ID_PRODUCT;
 
     IF COUNT_STOCK > 0 THEN
         UPDATE TB_STOCK SET
             QTD = QTD + (OLD.QTD * -1),
             UNITARY_VALUE = OLD.UNITARY_VALUE,
-            UPDATED_AT = TO_CHAR(NOW(), 'dd/MM/yyyy HH:mm:ss')
+            UPDATED_AT = TO_CHAR(now(), 'dd/MM/yyyy HH:mm:ss')::timestamp
         WHERE ID_PRODUCT = OLD.ID_PRODUCT;
 
     END IF;
