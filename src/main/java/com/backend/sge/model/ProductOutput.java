@@ -8,9 +8,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -38,8 +40,12 @@ public class ProductOutput implements Serializable {
     @ApiModelProperty(value = "Valor unitário")
     private Double unitaryValue;
 
-    @ApiModelProperty(value = "Data da saída")
+    @ApiModelProperty(value = "Data de criação")
     @CreationTimestamp
-    private Timestamp dateExist;
+    private Timestamp createdAt;
+
+    @ApiModelProperty(value = "Data de atualização")
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
 }

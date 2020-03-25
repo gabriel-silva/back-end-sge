@@ -10,7 +10,8 @@ BEGIN
     IF COUNT_STOCK > 0 THEN
         UPDATE TB_STOCK SET
             QTD = QTD + (OLD.QTD * -1),
-            UNITARY_VALUE = OLD.UNITARY_VALUE
+            UNITARY_VALUE = OLD.UNITARY_VALUE,
+            UPDATED_AT = NOW()
         WHERE ID_PRODUCT = OLD.ID_PRODUCT;
 
     END IF;

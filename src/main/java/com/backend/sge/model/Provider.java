@@ -1,16 +1,19 @@
 package com.backend.sge.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,14 @@ public class Provider implements Serializable {
 
     @ApiModelProperty(value = "Telefone Fixo")
     private String phone;
+
+    @ApiModelProperty(value = "Data de criação")
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @ApiModelProperty(value = "Data de atualização")
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
     @ApiModelProperty(value = "Endereço do fornecedor")
     @Embedded

@@ -7,9 +7,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +57,14 @@ public class Product implements Serializable {
 
     @ApiModelProperty(value = "Status do produto - ativado/desativado")
     private Boolean status;
+
+    @ApiModelProperty(value = "Data de criação")
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @ApiModelProperty(value = "Data de atualização")
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
     @ApiModelProperty(value = "Entrada de Produtos")
     @OneToMany(mappedBy = "product")
