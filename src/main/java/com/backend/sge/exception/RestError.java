@@ -13,14 +13,17 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class RestError {
 
+    private String field;
     private Date timestamp;
     private String message;
     private String details;
 
-    public RestError(Date timestamp, String message) {
+    public RestError(String field, Date timestamp, String message, String details) {
         super();
+        this.field = field;
         this.timestamp = timestamp;
         this.message = message;
+        this.details = details;
     }
 
     public RestError(Date timestamp, String message, String details) {

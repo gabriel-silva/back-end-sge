@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class CategoryValidation {
 
     @NotBlank(message = "nome da categoria é obrigatório")
-    @Size(min = 3, max = 50, message = "nome da categoria deve ser igual ou superior a 3 caracteres e menor que 50 caracteres")
+    @Size(min = 3, max = 50, message = "nome da categoria deve ter no mínimo 3 caracteres e no máximo 50 caracteres")
     private String name;
 
 }

@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class MeasurementUnitValidation {
 
     @NotBlank(message = "nome da unidade de medida é obrigatório")
-    @Size(min = 3, max = 15, message = "nome da unidade de medida deve ser igual ou superior a 3 caracteres e menor que 15 caracteres")
+    @Size(min = 3, max = 15, message = "nome da unidade de medida deve ter no mínimo 3 caracteres e no máximo 15 caracteres")
     private String name;
 
 }

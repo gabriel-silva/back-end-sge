@@ -76,7 +76,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         List<RestError> restErrors = new ArrayList<RestError>();
         List<FieldError> fieldErrors = methodArgumentNotValidException.getBindingResult().getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
-            RestError restError = new RestError(new Date(), "Erro de Validação", fieldError.getDefaultMessage());
+            RestError restError = new RestError(fieldError.getField(), new Date(), "Erro de Validação", fieldError.getDefaultMessage());
             restErrors.add(restError);
         }
         return new ResponseEntity<>(restErrors, httpStatus);
