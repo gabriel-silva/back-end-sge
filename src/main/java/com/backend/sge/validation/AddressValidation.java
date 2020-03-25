@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
 public class AddressValidation {
 
     @NotBlank(message = "logradouro é obrigatório")
-    @Size(min = 3, max = 255, message = "logradouro deve ser igual ou superior a 3 caracteres e menor que 255 caracteres")
+    @Size(min = 3, max = 255, message = "logradouro deve ter no mínino 3 caracteres e no máximo 255 caracteres")
     private String publicPlace;
 
     @NotNull(message = "número é obrigatório")
