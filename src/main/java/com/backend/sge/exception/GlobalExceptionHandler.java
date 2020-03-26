@@ -35,14 +35,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> handlerBadRequestException(BadRequestException badRequestException,
                                                         WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), badRequestException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), badRequestException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handlerNotFoundException(NotFoundException notFoundException, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), notFoundException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), notFoundException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, HttpStatus.NOT_FOUND);
     }
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handlerConstraintViolationException(
             ConstraintViolationException constraintViolationException, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), constraintViolationException.getSQLException().getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), constraintViolationException.getSQLException().getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, HttpStatus.BAD_REQUEST);
     }
@@ -87,7 +87,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleAsyncRequestTimeoutException(
             AsyncRequestTimeoutException asyncRequestTimeoutException, HttpHeaders httpHeaders, HttpStatus httpStatus,
             WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), asyncRequestTimeoutException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), asyncRequestTimeoutException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -95,7 +95,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleBindException(BindException bindException, HttpHeaders httpHeaders,
                                                          HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), bindException.getLocalizedMessage(), webRequest.getDescription(false));
+        RestError restError = new RestError(new Date(), bindException.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
 
@@ -103,7 +103,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleConversionNotSupported(
             ConversionNotSupportedException conversionNotSupportedException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), conversionNotSupportedException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), conversionNotSupportedException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -111,7 +111,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object object,
                                                              HttpHeaders httpHeaders, HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), exception.getLocalizedMessage(), webRequest.getDescription(false));
+        RestError restError = new RestError(new Date(), exception.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
 
@@ -119,7 +119,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(
             HttpMediaTypeNotAcceptableException httpMediaTypeNotAcceptableException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), httpMediaTypeNotAcceptableException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), httpMediaTypeNotAcceptableException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -128,7 +128,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
             HttpMediaTypeNotSupportedException httpMediaTypeNotSupportedException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), httpMediaTypeNotSupportedException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), httpMediaTypeNotSupportedException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -137,7 +137,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
             HttpMessageNotReadableException httpMessageNotReadableException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), httpMessageNotReadableException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), httpMessageNotReadableException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -146,7 +146,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotWritable(
             HttpMessageNotWritableException httpMessageNotWritableException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), httpMessageNotWritableException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), httpMessageNotWritableException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -155,7 +155,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
             HttpRequestMethodNotSupportedException httpRequestMethodNotSupportedException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), httpRequestMethodNotSupportedException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), httpRequestMethodNotSupportedException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -164,7 +164,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingPathVariable(
             MissingPathVariableException missingPathVariableException, HttpHeaders httpHeaders, HttpStatus httpStatus,
             WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), missingPathVariableException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), missingPathVariableException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -173,7 +173,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
             MissingServletRequestParameterException missingServletRequestParameterException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), missingServletRequestParameterException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), missingServletRequestParameterException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -182,7 +182,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingServletRequestPart(
             MissingServletRequestPartException missingServletRequestPartException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), missingServletRequestPartException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), missingServletRequestPartException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -190,7 +190,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException noHandlerFoundException,
                                                                    HttpHeaders httpHeaders, HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), noHandlerFoundException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), noHandlerFoundException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -199,7 +199,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleServletRequestBindingException(
             ServletRequestBindingException servletRequestBindingException, HttpHeaders httpHeaders,
             HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), servletRequestBindingException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), servletRequestBindingException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
@@ -207,7 +207,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException typeMismatchException,
                                                         HttpHeaders httpHeaders, HttpStatus httpStatus, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), typeMismatchException.getLocalizedMessage(),
+        RestError restError = new RestError(new Date(), typeMismatchException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, httpStatus);
     }
