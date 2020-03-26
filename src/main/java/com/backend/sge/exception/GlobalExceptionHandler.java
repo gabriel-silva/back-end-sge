@@ -50,7 +50,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handlerConstraintViolationException(
             ConstraintViolationException constraintViolationException, WebRequest webRequest) {
-        RestError restError = new RestError(new Date(), constraintViolationException.getSQLException().getMessage(),
+        RestError restError = new RestError(new Date(), constraintViolationException.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(restError, HttpStatus.BAD_REQUEST);
     }
