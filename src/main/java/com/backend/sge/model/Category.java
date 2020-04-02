@@ -12,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class Category implements Serializable {
 
     @ApiModelProperty(value = "Código")
@@ -42,8 +41,8 @@ public class Category implements Serializable {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    @ApiModelProperty(value = "Produtos")
-    @OneToMany(mappedBy = "category")
-    private List<Product> products = new ArrayList<>();
+//    @ApiModelProperty(value = "Produtos")
+//    @OneToMany(mappedBy = "category")
+//    private List<Product> products = new ArrayList<>();
 
 }

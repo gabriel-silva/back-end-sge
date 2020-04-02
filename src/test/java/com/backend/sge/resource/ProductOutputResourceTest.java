@@ -142,9 +142,9 @@ public class ProductOutputResourceTest {
 
         Product product = new Product();
         product.setId(productOutputValidation.getIdProduct());
-        product.setCategory(category);
-        product.setMeasurementUnit(measurementUnit);
-        product.setProvider(provider);
+        product.setIdCategory(category.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdProvider(provider.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -163,7 +163,7 @@ public class ProductOutputResourceTest {
         when(stockRepository.sumStockByIdProduct((long) 1)).thenReturn(100);
 
         ProductOutput productOutput = new ProductOutput();
-        productOutput.setProduct(product);
+        productOutput.setIdProduct(product.getId());
         productOutput.setQtd(productOutputValidation.getQtd());
         productOutput.setUnitaryValue(productOutputValidation.getUnitaryValue());
 
@@ -175,27 +175,27 @@ public class ProductOutputResourceTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.qtd", is(100)))
                 .andExpect(jsonPath("$.unitaryValue", is(2.50)))
-                .andExpect(jsonPath("$.product.id", is(1)))
-                .andExpect(jsonPath("$.product.category.id", is(1)))
-                .andExpect(jsonPath("$.product.category.name", is("Bebidas")))
-                .andExpect(jsonPath("$.product.measurementUnit.id", is(1)))
-                .andExpect(jsonPath("$.product.measurementUnit.name", is("UND")))
-                .andExpect(jsonPath("$.product.provider.id", is(1)))
-                .andExpect(jsonPath("$.product.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
-                .andExpect(jsonPath("$.product.provider.cnpj", is("45.997.418/0001-53")))
-                .andExpect(jsonPath("$.product.provider.phone", is("(21) 3300-3639")))
-                .andExpect(jsonPath("$.product.provider.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.product.provider.address.cep", is("22250-040")))
-                .andExpect(jsonPath("$.product.provider.address.city", is("Rio de Janeiro")))
-                .andExpect(jsonPath("$.product.provider.address.complement", is("Andar 12 Parte")))
-                .andExpect(jsonPath("$.product.provider.address.neighborhood", is("Botafogo")))
-                .andExpect(jsonPath("$.product.provider.address.number", is(374)))
-                .andExpect(jsonPath("$.product.provider.address.publicPlace", is("PR de Botafogo")))
-                .andExpect(jsonPath("$.product.provider.address.state", is("RJ")))
-                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
-                .andExpect(jsonPath("$.product.minStock", is(0)))
-                .andExpect(jsonPath("$.product.maxStock", is(100)))
-                .andExpect(jsonPath("$.product.status", is(true)));
+                .andExpect(jsonPath("$.idProduct", is(1)));
+//                .andExpect(jsonPath("$.product.category.id", is(1)))
+//                .andExpect(jsonPath("$.product.category.name", is("Bebidas")))
+//                .andExpect(jsonPath("$.product.measurementUnit.id", is(1)))
+//                .andExpect(jsonPath("$.product.measurementUnit.name", is("UND")))
+//                .andExpect(jsonPath("$.product.provider.id", is(1)))
+//                .andExpect(jsonPath("$.product.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+//                .andExpect(jsonPath("$.product.provider.cnpj", is("45.997.418/0001-53")))
+//                .andExpect(jsonPath("$.product.provider.phone", is("(21) 3300-3639")))
+//                .andExpect(jsonPath("$.product.provider.cellPhone", is("(21) 99933-3639")))
+//                .andExpect(jsonPath("$.product.provider.address.cep", is("22250-040")))
+//                .andExpect(jsonPath("$.product.provider.address.city", is("Rio de Janeiro")))
+//                .andExpect(jsonPath("$.product.provider.address.complement", is("Andar 12 Parte")))
+//                .andExpect(jsonPath("$.product.provider.address.neighborhood", is("Botafogo")))
+//                .andExpect(jsonPath("$.product.provider.address.number", is(374)))
+//                .andExpect(jsonPath("$.product.provider.address.publicPlace", is("PR de Botafogo")))
+//                .andExpect(jsonPath("$.product.provider.address.state", is("RJ")))
+//                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
+//                .andExpect(jsonPath("$.product.minStock", is(0)))
+//                .andExpect(jsonPath("$.product.maxStock", is(100)))
+//                .andExpect(jsonPath("$.product.status", is(true)));
 
         verify(productOutputRepository).save(any(ProductOutput.class));
 
@@ -278,9 +278,9 @@ public class ProductOutputResourceTest {
 
         Product product = new Product();
         product.setId(productOutputValidation.getIdProduct());
-        product.setCategory(category);
-        product.setMeasurementUnit(measurementUnit);
-        product.setProvider(provider);
+        product.setIdCategory(category.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdProvider(provider.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -299,7 +299,7 @@ public class ProductOutputResourceTest {
         when(stockRepository.sumStockByIdProduct((long) 1)).thenReturn(100);
 
         ProductOutput productOutput = new ProductOutput();
-        productOutput.setProduct(product);
+        productOutput.setIdProduct(product.getId());
         productOutput.setQtd(productOutputValidation.getQtd());
         productOutput.setUnitaryValue(productOutputValidation.getUnitaryValue());
 
@@ -313,27 +313,27 @@ public class ProductOutputResourceTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.qtd", is(100)))
                 .andExpect(jsonPath("$.unitaryValue", is(2.50)))
-                .andExpect(jsonPath("$.product.id", is(1)))
-                .andExpect(jsonPath("$.product.category.id", is(1)))
-                .andExpect(jsonPath("$.product.category.name", is("Bebidas")))
-                .andExpect(jsonPath("$.product.measurementUnit.id", is(1)))
-                .andExpect(jsonPath("$.product.measurementUnit.name", is("UND")))
-                .andExpect(jsonPath("$.product.provider.id", is(1)))
-                .andExpect(jsonPath("$.product.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
-                .andExpect(jsonPath("$.product.provider.cnpj", is("45.997.418/0001-53")))
-                .andExpect(jsonPath("$.product.provider.phone", is("(21) 3300-3639")))
-                .andExpect(jsonPath("$.product.provider.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.product.provider.address.cep", is("22250-040")))
-                .andExpect(jsonPath("$.product.provider.address.city", is("Rio de Janeiro")))
-                .andExpect(jsonPath("$.product.provider.address.complement", is("Andar 12 Parte")))
-                .andExpect(jsonPath("$.product.provider.address.neighborhood", is("Botafogo")))
-                .andExpect(jsonPath("$.product.provider.address.number", is(374)))
-                .andExpect(jsonPath("$.product.provider.address.publicPlace", is("PR de Botafogo")))
-                .andExpect(jsonPath("$.product.provider.address.state", is("RJ")))
-                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
-                .andExpect(jsonPath("$.product.minStock", is(0)))
-                .andExpect(jsonPath("$.product.maxStock", is(100)))
-                .andExpect(jsonPath("$.product.status", is(true)));
+                .andExpect(jsonPath("$.idProduct", is(1)));
+//                .andExpect(jsonPath("$.product.category.id", is(1)))
+//                .andExpect(jsonPath("$.product.category.name", is("Bebidas")))
+//                .andExpect(jsonPath("$.product.measurementUnit.id", is(1)))
+//                .andExpect(jsonPath("$.product.measurementUnit.name", is("UND")))
+//                .andExpect(jsonPath("$.product.provider.id", is(1)))
+//                .andExpect(jsonPath("$.product.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+//                .andExpect(jsonPath("$.product.provider.cnpj", is("45.997.418/0001-53")))
+//                .andExpect(jsonPath("$.product.provider.phone", is("(21) 3300-3639")))
+//                .andExpect(jsonPath("$.product.provider.cellPhone", is("(21) 99933-3639")))
+//                .andExpect(jsonPath("$.product.provider.address.cep", is("22250-040")))
+//                .andExpect(jsonPath("$.product.provider.address.city", is("Rio de Janeiro")))
+//                .andExpect(jsonPath("$.product.provider.address.complement", is("Andar 12 Parte")))
+//                .andExpect(jsonPath("$.product.provider.address.neighborhood", is("Botafogo")))
+//                .andExpect(jsonPath("$.product.provider.address.number", is(374)))
+//                .andExpect(jsonPath("$.product.provider.address.publicPlace", is("PR de Botafogo")))
+//                .andExpect(jsonPath("$.product.provider.address.state", is("RJ")))
+//                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
+//                .andExpect(jsonPath("$.product.minStock", is(0)))
+//                .andExpect(jsonPath("$.product.maxStock", is(100)))
+//                .andExpect(jsonPath("$.product.status", is(true)));
 
     }
 
@@ -355,6 +355,7 @@ public class ProductOutputResourceTest {
         productValidation.setStatus(true);
 
         Product product = new Product();
+        product.setId(productOutputValidation.getIdProduct());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -362,7 +363,7 @@ public class ProductOutputResourceTest {
 
         ProductOutput productOutput = new ProductOutput();
         productOutput.setId((long) 1);
-        productOutput.setProduct(product);
+        productOutput.setIdProduct(product.getId());
         productOutput.setQtd(productOutputValidation.getQtd());
         productOutput.setUnitaryValue(productOutputValidation.getUnitaryValue());
 
@@ -374,10 +375,11 @@ public class ProductOutputResourceTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.qtd", is(100)))
                 .andExpect(jsonPath("$.unitaryValue", is(2.50)))
-                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
-                .andExpect(jsonPath("$.product.minStock", is(0)))
-                .andExpect(jsonPath("$.product.maxStock", is(100)))
-                .andExpect(jsonPath("$.product.status", is(true)));
+                .andExpect(jsonPath("$.idProduct", is(1)));
+//                .andExpect(jsonPath("$.product.name", is("Coca-Cola 2LT")))
+//                .andExpect(jsonPath("$.product.minStock", is(0)))
+//                .andExpect(jsonPath("$.product.maxStock", is(100)))
+//                .andExpect(jsonPath("$.product.status", is(true)));
 
         verify(productOutputRepository).findById((long) 1);
 

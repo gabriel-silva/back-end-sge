@@ -12,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -21,7 +20,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class ProductInput implements Serializable {
 
     @ApiModelProperty(value = "Código")
@@ -29,10 +28,13 @@ public class ProductInput implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ApiModelProperty(value = "Produto")
-    @ManyToOne
-    @JoinColumn(name = "id_product", referencedColumnName = "id")
-    private Product product;
+//    @ApiModelProperty(value = "Produto")
+//    @ManyToOne
+//    @JoinColumn(name = "id_product", referencedColumnName = "id")
+//    private Product product;
+
+    @ApiModelProperty(value = "id do produto")
+    private Long idProduct;
 
     @ApiModelProperty(value = "Quantidade do estoque")
     private Integer qtd;

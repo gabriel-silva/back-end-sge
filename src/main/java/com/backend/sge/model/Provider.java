@@ -12,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class Provider implements Serializable {
 
     @ApiModelProperty(value = "Código")
@@ -55,8 +54,8 @@ public class Provider implements Serializable {
     @Embedded
     private Address address;
 
-    @ApiModelProperty(value = "Produtos")
-    @OneToMany(mappedBy = "provider")
-    private List<Product> products = new ArrayList<>();
+//    @ApiModelProperty(value = "Produtos")
+//    @OneToMany(mappedBy = "provider")
+//    private List<Product> products = new ArrayList<>();
 
 }

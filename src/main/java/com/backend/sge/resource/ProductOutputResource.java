@@ -52,7 +52,7 @@ public class ProductOutputResource {
 
                 // criação do objeto de saída de produto e inserção na tabela
                 ProductOutput productOutput = new ProductOutput();
-                productOutput.setProduct(product);
+                productOutput.setIdProduct(product.getId());
                 productOutput.setQtd(productOutputValidation.getQtd());
                 productOutput.setUnitaryValue(productOutputValidation.getUnitaryValue());
 
@@ -93,7 +93,7 @@ public class ProductOutputResource {
 
                 // criação do objeto de saída de produto e inserção na tabela
                 productOutput.setId(id);
-                productOutput.setProduct(product);
+                productOutput.setIdProduct(product.getId());
                 productOutput.setQtd(productOutputValidation.getQtd());
                 productOutput.setUnitaryValue(productOutputValidation.getUnitaryValue());
 

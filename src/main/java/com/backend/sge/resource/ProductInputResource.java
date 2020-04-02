@@ -52,7 +52,7 @@ public class ProductInputResource {
 
                 // criação do objeto de entrada de produto e inserção na tabela
                 ProductInput productInput = new ProductInput();
-                productInput.setProduct(product);
+                productInput.setIdProduct(product.getId());
                 productInput.setQtd(productInputValidation.getQtd());
                 productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 
@@ -66,7 +66,7 @@ public class ProductInputResource {
         } else {
             // criação do objeto de entrada de produto e inserção na tabela
             ProductInput productInput = new ProductInput();
-            productInput.setProduct(product);
+            productInput.setIdProduct(product.getId());
             productInput.setQtd(productInputValidation.getQtd());
             productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 
@@ -101,7 +101,7 @@ public class ProductInputResource {
 
                 // criação do objeto de entrada de produto e inserção na tabela
                 productInput.setId(id);
-                productInput.setProduct(product);
+                productInput.setIdProduct(product.getId());
                 productInput.setQtd(productInputValidation.getQtd());
                 productInput.setUnitaryValue(productInputValidation.getUnitaryValue());
 

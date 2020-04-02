@@ -51,9 +51,9 @@ public class ProductResource {
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: " + productValidation.getIdCategory()));
 
         Product product = new Product();
-        product.setProvider(provider);
-        product.setMeasurementUnit(measurementUnit);
-        product.setCategory(category);
+        product.setIdProvider(provider.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdCategory(category.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -80,9 +80,9 @@ public class ProductResource {
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada com o id :: " + productValidation.getIdCategory()));
 
         product.setId(id);
-        product.setProvider(provider);
-        product.setMeasurementUnit(measurementUnit);
-        product.setCategory(category);
+        product.setIdProvider(provider.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdCategory(category.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());

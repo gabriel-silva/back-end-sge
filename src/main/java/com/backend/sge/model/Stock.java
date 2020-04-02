@@ -12,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -21,7 +20,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class Stock implements Serializable {
 
     @ApiModelProperty(value = "Código")

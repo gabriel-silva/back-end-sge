@@ -133,9 +133,9 @@ public class ProductResourceTest {
         when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
 
         Product product = new Product();
-        product.setCategory(category);
-        product.setMeasurementUnit(measurementUnit);
-        product.setProvider(provider);
+        product.setIdCategory(category.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdProvider(provider.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -147,26 +147,26 @@ public class ProductResourceTest {
                 .content(objectMapper.writeValueAsString(productValidation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.category.id", is(1)))
-                .andExpect(jsonPath("$.category.name", is("Bebidas")))
-                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
-                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
-                .andExpect(jsonPath("$.provider.id", is(1)))
-                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
-                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
-                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
-                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
-                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
-                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
-                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
-                .andExpect(jsonPath("$.provider.address.number", is(374)))
-                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
-                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
                 .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
                 .andExpect(jsonPath("$.minStock", is(0)))
                 .andExpect(jsonPath("$.maxStock", is(100)))
                 .andExpect(jsonPath("$.status", is(true)));
+//                .andExpect(jsonPath("$.category.id", is(1)))
+//                .andExpect(jsonPath("$.category.name", is("Bebidas")))
+//                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
+//                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
+//                .andExpect(jsonPath("$.provider.id", is(1)))
+//                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+//                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
+//                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
+//                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
+//                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
+//                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
+//                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
+//                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
+//                .andExpect(jsonPath("$.provider.address.number", is(374)))
+//                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
+//                .andExpect(jsonPath("$.provider.address.state", is("RJ")));
 
         verify(productRepository).save(any(Product.class));
 
@@ -243,9 +243,9 @@ public class ProductResourceTest {
         when(providerRepository.findById((long) 1)).thenReturn(Optional.of(provider));
 
         Product product = new Product();
-        product.setCategory(category);
-        product.setMeasurementUnit(measurementUnit);
-        product.setProvider(provider);
+        product.setIdCategory(category.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdProvider(provider.getId());
         product.setName(productValidation.getName());
         product.setMinStock(productValidation.getMinStock());
         product.setMaxStock(productValidation.getMaxStock());
@@ -259,26 +259,26 @@ public class ProductResourceTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.category.id", is(1)))
-                .andExpect(jsonPath("$.category.name", is("Bebidas")))
-                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
-                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
-                .andExpect(jsonPath("$.provider.id", is(1)))
-                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
-                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
-                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
-                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
-                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
-                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
-                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
-                .andExpect(jsonPath("$.provider.address.number", is(374)))
-                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
-                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
                 .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
                 .andExpect(jsonPath("$.minStock", is(0)))
                 .andExpect(jsonPath("$.maxStock", is(100)))
                 .andExpect(jsonPath("$.status", is(true)));
+//                .andExpect(jsonPath("$.category.id", is(1)))
+//                .andExpect(jsonPath("$.category.name", is("Bebidas")))
+//                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
+//                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
+//                .andExpect(jsonPath("$.provider.id", is(1)))
+//                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+//                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
+//                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
+//                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
+//                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
+//                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
+//                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
+//                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
+//                .andExpect(jsonPath("$.provider.address.number", is(374)))
+//                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
+//                .andExpect(jsonPath("$.provider.address.state", is("RJ")));
 
     }
 
@@ -345,9 +345,9 @@ public class ProductResourceTest {
 
         Product product = new Product();
         product.setId((long) 1);
-        product.setCategory(category);
-        product.setMeasurementUnit(measurementUnit);
-        product.setProvider(provider);
+        product.setIdCategory(category.getId());
+        product.setIdMeasurementUnit(measurementUnit.getId());
+        product.setIdProvider(provider.getId());
         product.setName("Coca-Cola 2LT");
         product.setMinStock(0);
         product.setMaxStock(100);
@@ -359,26 +359,26 @@ public class ProductResourceTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.category.id", is(1)))
-                .andExpect(jsonPath("$.category.name", is("Bebidas")))
-                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
-                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
-                .andExpect(jsonPath("$.provider.id", is(1)))
-                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
-                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
-                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
-                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
-                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
-                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
-                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
-                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
-                .andExpect(jsonPath("$.provider.address.number", is(374)))
-                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
-                .andExpect(jsonPath("$.provider.address.state", is("RJ")))
                 .andExpect(jsonPath("$.name", is("Coca-Cola 2LT")))
                 .andExpect(jsonPath("$.minStock", is(0)))
                 .andExpect(jsonPath("$.maxStock", is(100)))
                 .andExpect(jsonPath("$.status", is(true)));
+//                .andExpect(jsonPath("$.category.id", is(1)))
+//                .andExpect(jsonPath("$.category.name", is("Bebidas")))
+//                .andExpect(jsonPath("$.measurementUnit.id", is(1)))
+//                .andExpect(jsonPath("$.measurementUnit.name", is("UND")))
+//                .andExpect(jsonPath("$.provider.id", is(1)))
+//                .andExpect(jsonPath("$.provider.name", is("COCA COLA INDUSTRIAS LTDA")))
+//                .andExpect(jsonPath("$.provider.cnpj", is("45.997.418/0001-53")))
+//                .andExpect(jsonPath("$.provider.phone", is("(21) 3300-3639")))
+//                .andExpect(jsonPath("$.provider.cellPhone", is("(21) 99933-3639")))
+//                .andExpect(jsonPath("$.provider.address.cep", is("22250-040")))
+//                .andExpect(jsonPath("$.provider.address.city", is("Rio de Janeiro")))
+//                .andExpect(jsonPath("$.provider.address.complement", is("Andar 12 Parte")))
+//                .andExpect(jsonPath("$.provider.address.neighborhood", is("Botafogo")))
+//                .andExpect(jsonPath("$.provider.address.number", is(374)))
+//                .andExpect(jsonPath("$.provider.address.publicPlace", is("PR de Botafogo")))
+//                .andExpect(jsonPath("$.provider.address.state", is("RJ")));
 
         verify(productRepository).findById((long) 1);
 

@@ -12,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.StringIdGenerator.class)
 public class Product implements Serializable {
 
     @ApiModelProperty(value = "Código")
@@ -31,20 +30,29 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ApiModelProperty(value = "Categoria")
-    @ManyToOne
-    @JoinColumn(name = "id_category", referencedColumnName = "id")
-    private Category category;
+//    @ApiModelProperty(value = "Categoria")
+//    @ManyToOne
+//    @JoinColumn(name = "id_category", referencedColumnName = "id")
+//    private Category category;
+//
+//    @ApiModelProperty(value = "Unidade de medida")
+//    @ManyToOne
+//    @JoinColumn(name = "id_measurement_unit", referencedColumnName = "id")
+//    private MeasurementUnit measurementUnit;
+//
+//    @ApiModelProperty(value = "Fornecedor")
+//    @ManyToOne
+//    @JoinColumn(name = "id_provider", referencedColumnName = "id")
+//    private Provider provider;
 
-    @ApiModelProperty(value = "Unidade de medida")
-    @ManyToOne
-    @JoinColumn(name = "id_measurement_unit", referencedColumnName = "id")
-    private MeasurementUnit measurementUnit;
+    @ApiModelProperty(value = "id da categoria")
+    private Long idCategory;
 
-    @ApiModelProperty(value = "Fornecedor")
-    @ManyToOne
-    @JoinColumn(name = "id_provider", referencedColumnName = "id")
-    private Provider provider;
+    @ApiModelProperty(value = "id da unidade de medida")
+    private Long idMeasurementUnit;
+
+    @ApiModelProperty(value = "id do fornecedor")
+    private Long idProvider;
 
     @ApiModelProperty(value = "Nome do produto")
     private String name;
@@ -66,12 +74,12 @@ public class Product implements Serializable {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    @ApiModelProperty(value = "Entrada de Produtos")
-    @OneToMany(mappedBy = "product")
-    private List<ProductInput> productInputs = new ArrayList<>();
-
-    @ApiModelProperty(value = "Saida de Produtos")
-    @OneToMany(mappedBy = "product")
-    private List<ProductOutput> productOutputs = new ArrayList<>();
+//    @ApiModelProperty(value = "Entrada de Produtos")
+//    @OneToMany(mappedBy = "product")
+//    private List<ProductInput> productInputs = new ArrayList<>();
+//
+//    @ApiModelProperty(value = "Saida de Produtos")
+//    @OneToMany(mappedBy = "product")
+//    private List<ProductOutput> productOutputs = new ArrayList<>();
 
 }
